@@ -1,6 +1,7 @@
 package geometries;
 
 import primitives.Point3D;
+import primitives.Vector;
 
 public class Triangle extends Polygon {
     Point3D _p1;
@@ -17,4 +18,18 @@ public class Triangle extends Polygon {
     {
         super(p1, p2, p3);
     }
+
+    @Override
+    public String toString() {
+        return "Triangle{" +
+                "_p1=" + _p1 +
+                ", _p2=" + _p2 +
+                ", _p3=" + _p3 +
+                '}';
+    }
+    public Vector getNormal() {
+        return getNormal(null);
+    }
+
 }
+

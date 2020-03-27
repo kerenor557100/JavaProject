@@ -3,33 +3,40 @@ package geometries;
 import primitives.Point3D;
 import primitives.Vector;
 
+/**
+ *  @author Keren or and avital
+ */
 public class Triangle extends Polygon {
-    Point3D _p1;
-    Point3D _p2;
-    Point3D _p3;
 
-    /**
-     * the Triangles constructor
-     * @param p1
-     * @param p2
-     * @param p3
-     */
-    public Triangle(Point3D p1, Point3D p2,Point3D p3)
-    {
-        super(p1, p2, p3);
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof Triangle)) return false;
+
+        Triangle tr = (Triangle) obj;
+
+        // LO Mushlam
+        return _vertices.get(0).equals(tr._vertices.get(0)) &&
+                _vertices.get(1).equals(tr._vertices.get(1)) &&
+                _vertices.get(2).equals(tr._vertices.get(2));
     }
+
 
     @Override
     public String toString() {
-        return "Triangle{" +
-                "_p1=" + _p1 +
-                ", _p2=" + _p2 +
-                ", _p3=" + _p3 +
-                '}';
+        String result = "";
+        for (Point3D p : _vertices ) {
+            result += p.toString();
+        }
+        return  result;
     }
+
+    public Triangle(Point3D p1, Point3D p2, Point3D p3) {
+        super(p1, p2, p3);
+    }
+
     public Vector getNormal() {
-        return getNormal(null);
+        return super.getNormal(super._plane._p);
     }
-
 }
-

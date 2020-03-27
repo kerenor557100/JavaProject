@@ -12,7 +12,7 @@ import static primitives.Util.isZero;
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
  *
- * @author Dan
+ * @author keren or and avital
  */
 public class Polygon implements Geometry {
     /**
@@ -95,7 +95,8 @@ public class Polygon implements Geometry {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return Objects.hash(_vertices, _plane);
     }
 

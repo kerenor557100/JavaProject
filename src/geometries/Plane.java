@@ -3,6 +3,9 @@ package geometries;
 import primitives.Point3D;
 import primitives.Vector;
 
+/**
+ *  @author Keren or and avital
+ */
 public class Plane implements Geometry {
 
     Point3D _p;
@@ -26,13 +29,16 @@ public class Plane implements Geometry {
     }
 
     @Override
-    public Vector getNormal(Point3D p) {
+    public Vector getNormal(Point3D p)
+    {
+        if (this._p==p)
         return _normal;
+        else {throw new IllegalArgumentException("this is not the same point");}
     }
 
     //because polygon
     public Vector getNormal() {
-        return getNormal(null);
-    }
+        return  _normal.normalized();
 
+    }
 }

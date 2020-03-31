@@ -2,6 +2,8 @@ package geometries;
 
 import primitives.*;
 
+import java.util.List;
+
 /**
  *  @author Keren or and avital
  * Represents an infinite tube in the 3D space.
@@ -86,5 +88,10 @@ public class Tube extends RadialGeometry {
         //This vector is orthogonal to the _direction vector.
         Vector check = vector1.subtract(vector2);
         return check.normalize();
+    }
+
+    @Override
+    public List<Point3D> findIntersections(Ray ray) {
+        return null;
     }
 }

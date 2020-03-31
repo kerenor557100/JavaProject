@@ -1,10 +1,9 @@
 package primitives;
 
-/**
- * @author Keren or and avital
- * Ray class
- */
+import static primitives.Util.isZero;
+
 public class Ray {
+
 
     /**
      * The point from which the ray starts.
@@ -57,6 +56,10 @@ public class Ray {
      */
     public Point3D getPoint() {
         return new Point3D(_point);
+    }
+
+    public Point3D getTargetPoint(double length) {
+        return isZero(length ) ? _point : new Point3D(_point).add(_direction.scale(length));
     }
 
     /**

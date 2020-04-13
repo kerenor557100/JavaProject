@@ -37,6 +37,7 @@ public class Triangle extends Polygon {
     }
 
     public Vector getNormal() {
+
         return super.getNormal(super._plane._p);
     }
 }

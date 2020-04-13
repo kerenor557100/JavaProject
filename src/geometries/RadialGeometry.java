@@ -9,7 +9,6 @@ import static primitives.Util.isZero;
  */
 public abstract class RadialGeometry implements Geometry{
     double  _radius;
-
     /**
      *
      * @param _radius
@@ -29,7 +28,6 @@ public abstract class RadialGeometry implements Geometry{
 
         return isZero(this._radius -that._radius);
     }
-
 
     public RadialGeometry(RadialGeometry other){
         this._radius= other._radius;

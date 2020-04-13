@@ -8,8 +8,7 @@ import org.junit.Test;
 import primitives.Point3D;
 import primitives.Vector;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for geometries.Polygon class
@@ -82,20 +81,26 @@ public class PolygonTest {
 
     }
 
+
     /**
      * Test method for {@link geometries.Polygon#getNormal(primitives.Point3D)}.
      */
     @Test
-    /**
-     * Test method for {@link geometries.Polygon#getNormal(geometries.Polygon)}.
-     */
-    public void getNormal() {
+    public void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here
         Polygon pl = new Polygon(new Point3D(0, 0, 1), new Point3D(1, 0, 0), new Point3D(0, 1, 0),
                 new Point3D(-1, 1, 1));
         double sqrt3 = Math.sqrt(1d / 3);
         assertEquals("Bad normal to trinagle", new Vector(sqrt3, sqrt3, sqrt3), pl.getNormal(new Point3D(0, 0, 1)));
+    }
+    /**
+     * Test method for {@link geometries.Polygon#findIntersections(primitives.Ray)}.
+     */
+    @Test
+    public void testFindIntersections() {
+
+
     }
 
 }

@@ -30,7 +30,14 @@ public class PlaneTest {
         assertEquals(p.getNormal(p.get_p()),v);
 
     }
+    /**
+     * Test method for {@link geometries.Plane#findIntersections(primitives.Ray)}.
+     */
+    @Test
+    public void testFindIntersections() {
 
+
+    }
 
 
 }

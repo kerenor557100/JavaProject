@@ -5,7 +5,7 @@ import primitives.Ray;
 import primitives.Vector;
 
 /**
- *  @author Keren or and avital
+ *  @author Keren or and Avital
  */
 public class Cylinder extends Tube  {
     private  double _height;
@@ -35,11 +35,15 @@ public class Cylinder extends Tube  {
 
     @Override
     public String toString() {
+
         return "Cylinder{" +
+
                 "_height="+_height+
+
                 "_axisRay=" + super.get_ray() +
+
                 "_radius="+super.get_radius()+
+
                 '}';
     }
 }
-

@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Unit tests for geometries.Sphere class
  * @author Keren or and Avital
+ *
  */
 
 class SphereTest {
@@ -42,6 +43,9 @@ class SphereTest {
 
     }
 
+    /**
+     * Test method for {@link geometries.Sphere#findIntersections(primitives.Ray)}.
+     */
 
     @Test
     public void findIntersectionsTest() {

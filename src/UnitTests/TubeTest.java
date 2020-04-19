@@ -42,14 +42,7 @@ public class TubeTest {
 
         assertEquals(c2,_t.getNormal(p2));
     }
-    /**
-     * Test method for {@link geometries.Tube#findIntersections(primitives.Ray)}.
-     */
-    @Test
-    public void findIntersections() {
 
-
-    }
 
 
 

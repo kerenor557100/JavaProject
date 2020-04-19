@@ -14,7 +14,8 @@ public class Point3D {
      * @param _y
      * @param _z
      */
-    public Point3D(Coordinate _x, Coordinate _y, Coordinate _z) {
+    public Point3D(Coordinate _x, Coordinate _y, Coordinate _z)
+    {
         this._x = _x;
         this._y = _y;
         this._z = _z;

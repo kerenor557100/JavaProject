@@ -38,6 +38,12 @@ public class Point3D {
         this._y = coorY;
         this._z = coorZ;
     }
+
+    /**
+     *  get and set functions
+     */
+
+
     public Coordinate get_x() {
         return _x;
     }
@@ -65,7 +71,7 @@ public class Point3D {
     /**
      * override equals
      * @param o
-     * @return
+     * @return if equals (boolian)
      */
     @Override
     public boolean equals(Object o) {
@@ -98,7 +104,7 @@ public class Point3D {
     /**
      * distanceSquared - The squeeze between two squares
      * @param p2
-     * @return
+     * @return distance before doing sqrt
      */
     public double distanceSquared(Point3D p2) {
         if (this.equals(p2) == true)
@@ -116,7 +122,7 @@ public class Point3D {
     /**
      * distance - distance between 2 points
      * @param p2
-     * @return
+     * @return distance
      */
     public double distance(Point3D p2)
     {
@@ -131,7 +137,7 @@ public class Point3D {
      * point in the parameter, returns a vector from the second point
      * to the point at which the operation is performed
      * @param vec
-     * @return
+     * @return Point3D
      */
     public Point3D add(Vector vec) {
 
@@ -146,7 +152,7 @@ public class Point3D {
 
     /**
      * to string fun override
-     * @return
+     * @return string
      */
     @Override
     public String toString() {

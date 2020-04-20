@@ -4,6 +4,8 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  *  @author Keren or and Avital
  */
@@ -45,5 +47,11 @@ public class Cylinder extends Tube  {
                 "_radius="+super.get_radius()+
 
                 '}';
+    }
+
+    @Override
+    public List<Point3D> findIntersections(Ray ray) {
+        // TODO (Not required)
+        return null;
     }
 }

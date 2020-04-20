@@ -1,7 +1,5 @@
 package geometries;
 
-
-
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
@@ -11,6 +9,12 @@ import java.util.List;
 import static primitives.Util.isZero;
 /**
  *  @author Keren or and avital
+ */
+
+/**
+ * This Class represents a Triangle
+ *
+ * *
  */
 public class Triangle extends Polygon {
 
@@ -22,7 +26,7 @@ public class Triangle extends Polygon {
 
         Triangle tr = (Triangle) obj;
 
-        // LO Mushlam
+
         return _vertices.get(0).equals(tr._vertices.get(0)) &&
                 _vertices.get(1).equals(tr._vertices.get(1)) &&
                 _vertices.get(2).equals(tr._vertices.get(2));
@@ -46,7 +50,14 @@ public class Triangle extends Polygon {
     public Vector getNormal() {
         return super.getNormal(super._plane._p);
     }
-
+    /**
+     * Find the intersections between the Ray and the Triangle, The function checks
+     * if the points who are the intersections between the ray and the plane are in
+     * the triangle
+     *
+     * @param ray
+     * @return if there are intersections
+     */
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {

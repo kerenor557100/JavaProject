@@ -14,6 +14,10 @@ public class Geometries implements Intersectable {
         add( _geometries);
     }
 
+    /**
+     * The function add a Geometry to the list
+     * @param geometries
+     */
     public void add(Intersectable... geometries) {
         for (Intersectable geo : geometries ) {
             _geometries.add(geo);
@@ -21,9 +25,10 @@ public class Geometries implements Intersectable {
     }
 
     /**
-     * Na le Hasbir befrotrot
+     * This function find the intersections between the list of Geometry and a Ray
+     *
      * @param ray
-     * @return
+     * @return the list of Point3D who are the intersections
      */
     @Override
     public List<Point3D> findIntersections(Ray ray) {

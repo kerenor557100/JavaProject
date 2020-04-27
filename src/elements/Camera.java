@@ -3,6 +3,10 @@ package elements;
 import primitives.*;
 
 import static primitives.Util.isZero;
+/**
+ *  @author Keren or and Avital
+ */
+
 
 public class Camera{
     private Point3D _p0;
@@ -15,7 +19,7 @@ public class Camera{
 
         //if the the vectors are not orthogonal, throw exception.
         if (_vUp.dotProduct(_vTo) != 0)
-            throw new IllegalArgumentException("the vectors must be orthogonal");
+            throw new IllegalArgumentException("the vectors must be orthogonal!!");
 
         this._p0 =  new Point3D(_p0);
 
@@ -60,7 +64,7 @@ public class Camera{
     {
         if (isZero(screenDistance))
         {
-            throw new IllegalArgumentException("distance cannot be 0");
+            throw new IllegalArgumentException("distance cannot be 0!!");
         }
 
         Point3D Pc = _p0.add(_vTo.scale(screenDistance));
@@ -79,7 +83,8 @@ public class Camera{
         }
         if (! isZero(yi))
         {
-            Pij = Pij.subtract(_vUp.scale(yi));
+
+            Pij= Pij.add(_vUp.scale(-yi));
         }
 
         Vector Vij = Pij.subtract(_p0);
@@ -88,9 +93,3 @@ public class Camera{
 
     }
 
-
-
-
-
-
-}

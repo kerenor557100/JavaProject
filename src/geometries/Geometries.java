@@ -23,7 +23,11 @@ public class Geometries implements Intersectable {
             _geometries.add(geo);
         }
     }
-
+    public void remove(Intersectable... intersectables) {
+        for (Intersectable geo : _geometries) {
+            _geometries.remove(geo);
+        }
+    }
     /**
      * This function find the intersections between the list of Geometry and a Ray
      *

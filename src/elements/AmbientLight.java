@@ -13,7 +13,7 @@ public class AmbientLight {
         this._intensity = _intensity;
     }
 
-    public AmbientLight(Color _intensity, int ka) {
+    public AmbientLight(Color _intensity, double ka) {
         // ka is always 1 so we don't use it
         this._intensity = _intensity;
     }

@@ -1,10 +1,12 @@
 package scene;
 
-import elements.AmbientLight;
-import elements.Camera;
+import elements.*;
 import geometries.Geometries;
 import geometries.Intersectable;
 import primitives.Color;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Scene {
     private final String _name;
@@ -14,6 +16,8 @@ public class Scene {
     private Camera _camera;
     private double _distance;
     private AmbientLight _ambientLight;
+    private List<LightSource> _lights = null;
+
 
 
 
@@ -50,6 +54,12 @@ public class Scene {
         for (Intersectable i:intersectables ) {
             _geometries.remove(i);
         }
+    }
+    public void addLights(LightSource light) {
+        if (_lights == null) {
+            _lights = new ArrayList<>();
+        }
+        _lights.add(light);
     }
 
     public static class  SceneBuilder  {

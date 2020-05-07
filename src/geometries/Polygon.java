@@ -104,6 +104,11 @@ public class Polygon extends Geometry {
     }
 
     @Override
+    public Vector getNormal() {
+        return null;
+    }
+
+    @Override
     public List<GeoPoint> findIntersections(Ray ray) {
         List<GeoPoint> intersections = _plane.findIntersections(ray);
         if (intersections == null)

@@ -7,7 +7,7 @@ public class Vector {
 
     public  final static Vector ZERO = new Vector(new Point3D(new Coordinate(0.0),new Coordinate(0.0),new Coordinate(0.0)));
 
-    /**
+    /*
      * Constractor
      * • Builders receiving:
      * a) three coordinates,
@@ -19,9 +19,10 @@ public class Vector {
     public Vector(Point3D _head) {
         Point3D Zero=new Point3D(new Coordinate(0.0),new Coordinate(0.0),new Coordinate(0.0));
 
-        if (_head != Zero) {
+        if (_head != Zero)
             this._head = _head;
-        } else throw new IllegalArgumentException (  "head cannot be the zero vector");
+
+        else throw new IllegalArgumentException (  "head cannot be the zero vector");
 
 
     }
@@ -50,7 +51,7 @@ public class Vector {
     }
     public Vector(Vector _head)
     {
-        Vector v2=new Vector(_head.get_head().get_x(),_head.get_head().get_y(),_head.get_head().get_z());
+        Vector v2=new Vector(_head.get_head().get_x().get(),_head.get_head().get_y().get(),_head.get_head().get_z().get());
         this._head=v2._head;
     }
     public Vector subtract(Vector vec){
@@ -59,12 +60,14 @@ public class Vector {
                 this._head.get_y().get()-vec._head.get_y().get(),
                 this._head.get_z().get()-vec._head.get_z().get());
     }
+
     public Vector add(Vector vec){
         return new Vector(
                 this._head.get_x().get()+vec._head.get_x().get(),
                 this._head.get_y().get()+vec._head.get_y().get(),
                 this._head.get_z().get()+vec._head.get_z().get());
     }
+
     public Vector scale(double num){
         return new Vector(
                 this._head.get_x().get()*num,
@@ -103,12 +106,13 @@ public class Vector {
                 this._head.get_y().get()*this._head.get_y().get()+
                 this._head.get_z().get()*this._head.get_z().get());
     }
+
     public double length()
     {
         return Math.sqrt(this.lengthSquared());
     }
 
-    /**
+    /*
      * get Fun return _head
      * @return
      */
@@ -116,7 +120,7 @@ public class Vector {
         return _head;
     }
 
-    /**
+    /*
      * set Fun set Point to _head
      * @param _head
      */
@@ -126,7 +130,7 @@ public class Vector {
 
 
 
-    /**
+    /*
      * override equal fun
      * @param o
      * @return
@@ -143,37 +147,33 @@ public class Vector {
     public int hashCode() {
         return Objects.hash(_head);
     }
-    /**
+    /*
      * @return the same Vector after normalisation
      * @throws ArithmeticException if length = 0
      */
     public Vector normalize() {
 
-        this._head=this.normalized()._head;
-
-        return this;
-
-    }
-    /**
-     * @return the same Vector after normalisation
-     * @throws ArithmeticException if length = 0
-     */
-    public Vector normalized() {
-
-        double x = this._head.get_x().get();
-        double y = this._head.get_y().get();
-        double z = this._head.get_z().get();
+        double x = this._head.get_x()._coord;
+        double y = this._head.get_y()._coord;
+        double z = this._head.get_z()._coord;
 
         double length = this.length();
 
         if (length == 0)
             throw new ArithmeticException("divide by Zero");
-        Vector normal = new Vector(new Point3D(new Coordinate(x / length),new Coordinate(y / length),new Coordinate(z / length)));
 
-        return normal;
+        this._head.set_x(new Coordinate(x / length));
+        this._head.set_y(new Coordinate(y / length));
+        this._head.set_z(new Coordinate(z / length));
 
+        return this;
     }
 
+    public Vector normalized() {
+        Vector vector = new Vector(this);
+        vector.normalize();
+        return vector;
+    }
 
 
     @Override
@@ -182,7 +182,4 @@ public class Vector {
                 "_head=" + _head +
                 '}';
     }
-
-
-
 }

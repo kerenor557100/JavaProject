@@ -14,6 +14,14 @@ public class Plane extends Geometry {
     Point3D _p; //Q
     Vector _normal;
 
+    public Point3D get_p() {
+        return _p;
+    }
+
+    public Vector get_normal() {
+        return _normal;
+    }
+
     public Plane(Color emissionLight, Material material, Point3D p1, Point3D p2, Point3D p3) {
         super(emissionLight, material);
 
@@ -73,7 +81,7 @@ public class Plane extends Geometry {
             return null;
         }
 
-        GeoPoint geo = new GeoPoint(this, ray.getTargetPoint(t));
+        GeoPoint geo = new GeoPoint(this, ray.getPoint(t));
         return List.of(geo);
     }
 

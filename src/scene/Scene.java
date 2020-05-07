@@ -16,6 +16,9 @@ public class Scene {
     private Camera _camera;
     private double _distance;
     private AmbientLight _ambientLight;
+
+
+
     private List<LightSource> _lights = null;
 
 
@@ -45,6 +48,9 @@ public class Scene {
     public Color getBackground() {
         return this._background;
     }
+    public List<LightSource> getLightSources() {
+        return _lights;
+    }
     public void addGeometries(Intersectable... intersectables) {
         for (Intersectable i:intersectables ) {
             _geometries.add(i);
@@ -61,6 +67,8 @@ public class Scene {
         }
         _lights.add(light);
     }
+
+
 
     public static class  SceneBuilder  {
         private  String _name;

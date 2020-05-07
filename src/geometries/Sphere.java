@@ -64,6 +64,11 @@ public class Sphere extends RadialGeometry {
     }
 
     @Override
+    public Vector getNormal() {
+        return null;
+    }
+
+    @Override
     public List<GeoPoint> findIntersections(Ray ray) {
         Point3D p0 = ray.getPoint();
         Vector v = ray.getDirection();

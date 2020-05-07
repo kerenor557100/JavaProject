@@ -102,6 +102,11 @@ public class Tube extends RadialGeometry {
     }
 
     @Override
+    public Vector getNormal() {
+        return null;
+    }
+
+    @Override
     public List<GeoPoint> findIntersections(Ray anotherray) {
         //TODO implementation
 

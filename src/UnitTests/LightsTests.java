@@ -55,7 +55,7 @@ public class LightsTests {
 
 
         scene.addGeometries(
-                new Sphere(new Color(java.awt.Color.BLUE), new Material(0.5, 0.5, 100), 50, new Point3D(0, 0, 50)));
+                new Sphere(new Color(java.awt.Color.RED), new Material(0.5, 0.5, 100), 50, new Point3D(0, 0, 50)));
 
         scene.addLights(new PointLight(new Color(500, 300, 0), new Point3D(-50, 50, -50), 1, 0.00001, 0.000001));
 
@@ -128,7 +128,7 @@ public class LightsTests {
     @Test
     public void trianglesPointLight() {
         Scene scene= new Scene.SceneBuilder("Test scene")
-                .addAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15))
+                .addAmbientLight(new AmbientLight(new Color(java.awt.Color.RED), 0.15))
                 .addCamera(new Camera(new Point3D(0, 0, -1000), new Vector(0, 0, 1), new Vector(0, -1, 0)))
                 .addDistance(1000)
                 .addBackground(Color.BLACK)

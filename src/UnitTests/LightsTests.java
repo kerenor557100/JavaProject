@@ -1,6 +1,5 @@
-package UnitTests;
+package elements;
 
-import elements.*;
 import geometries.Sphere;
 import geometries.Triangle;
 import org.junit.jupiter.api.Test;

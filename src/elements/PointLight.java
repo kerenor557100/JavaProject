@@ -3,7 +3,7 @@ package elements;
 import primitives.Color;
 import primitives.Point3D;
 import primitives.Vector;
-
+//מקור אור נקודתי: מקור אור שאינו כיווני בעל עוצמה.יש מיקום אך לא כיוון.
 public class PointLight extends Light implements LightSource {
     Point3D _position;
     double _kC;

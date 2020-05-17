@@ -6,7 +6,7 @@ import primitives.Vector;
 
 public class DirectionalLight extends Light implements LightSource {
     private Vector _direction;
-
+// מקור אור כיווני: (כגון השמש) זהו מקור אור הנמצא באינסוף או במיקום רחוק מאוד, בעל כיוון ואין הנחתה בעקבות המרחק.
 
     /**
      * Initialize directional light with it's intensity and direction, direction

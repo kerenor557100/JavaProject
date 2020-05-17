@@ -7,7 +7,7 @@ import primitives.Color;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//מחלקה המאחדת את כל מה שהגדרנו בכל הפרוייקט עד כה כדי ליצור סצנה.
 public class Scene {
     private final String _name;
     private final Geometries _geometries = new Geometries();

@@ -5,7 +5,7 @@ import primitives.Ray;
 import primitives.Vector;
 
 import static primitives.Util.isZero;
-
+//המצלמה!! מרכז המצלמה המשקיף על המודל הוא ראשית הצירים ממנו יוצאים שלושה וקטורים שהם הצירים של המערכת.תפקידה חשוב מאוד במערכת.
 public class Camera {
     Point3D _p0;
     Vector _vTo;

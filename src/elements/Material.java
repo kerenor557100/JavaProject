@@ -1,5 +1,5 @@
 package elements;
-
+//החומר ממנו עשוי הגוף. זה ישפיע על יכולת החזרת האור שלו.
 public class Material {
     private double _kD;
     private double _kS;

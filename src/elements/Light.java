@@ -2,7 +2,7 @@
 package elements;
 
 import primitives.Color;
-
+//זו מחלקה אבסטרקטית המאפיינת את כל מקורות האור.
 public abstract class Light {
     /**
      * _intensity value, set to protected

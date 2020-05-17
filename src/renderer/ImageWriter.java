@@ -16,6 +16,7 @@ import java.io.IOException;
  * of View Plane - pixel matrix size and resolution
  * @author Dan
  */
+//מחלקה המקבלת סצנה ומעבירה אותה למסך
 public class ImageWriter {
     private double _imageWidth, _imageHeight;
     private int _nX, _nY;

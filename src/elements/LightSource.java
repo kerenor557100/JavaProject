@@ -4,9 +4,9 @@ import primitives.*;
 
 /**
  * Interface for common actions of light sources
- *
- * @author Dan Zilberstein
+
  */
+//מקור תאורה.
 public interface LightSource  {
     /**
      * Get light source intensity as it reaches a point I<sub>P</sub>

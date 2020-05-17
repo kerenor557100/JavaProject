@@ -5,6 +5,7 @@ package primitives;
  *
  * @author keren or and avital
  */
+//מחלקה אבסטרקטית בעלת פונקציונליות בסיסיות שנעזר בהם במהלך הפרוייקט
 public abstract class Util {
     // It is binary, equivalent to ~1/1,000,000,000,000 in decimal (12 digits)
     private static final int ACCURACY = -40;
@@ -30,7 +31,7 @@ public abstract class Util {
     public static boolean isZero(double number) {
         return getExp(number) < ACCURACY;
     }
-
+//שימושי מאוד
     /**
      * Aligns the number to zero if it is almost zero
      *
@@ -40,5 +41,5 @@ public abstract class Util {
     public static double alignZero(double number) {
         return getExp(number) < ACCURACY ? 0.0 : number;
     }
-
+//שימושי מאוד
 }

@@ -9,7 +9,7 @@ import scene.Scene;
 import java.util.List;
 
 import static primitives.Util.alignZero;
-
+//עושה את כל הפעולות על מנת שתיווצר סצנה
 public class Render {
     private Scene _scene;
     private ImageWriter _imageWriter;

@@ -1,22 +1,17 @@
 package primitives;
 
+
 import java.util.Objects;
+
 
 public class Vector {
     private  Point3D _head;
 
     public  final static Vector ZERO = new Vector(new Point3D(new Coordinate(0.0),new Coordinate(0.0),new Coordinate(0.0)));
 
-    /*
-     * Constractor
-     * • Builders receiving:
-     * a) three coordinates,
-     * b) three double-digit numbers,
-     * c) a point,
-     * d) a vector
-     * @param _head
-     */
+
     public Vector(Point3D _head) {
+
         Point3D Zero=new Point3D(new Coordinate(0.0),new Coordinate(0.0),new Coordinate(0.0));
 
         if (_head != Zero)
@@ -39,6 +34,9 @@ public class Vector {
         else
             this._head = _head;
 
+    }
+    public Point3D getHead() {
+        return new Point3D(_head.get_x()._coord, _head.get_y()._coord, _head.get_z()._coord);
     }
 
     public Vector(double _x,double _y,double _z){

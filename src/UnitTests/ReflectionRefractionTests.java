@@ -1,10 +1,4 @@
 package UnitTests;
-
-/**
- *
- */
-package unittests;
-
 import org.junit.Test;
 
 import elements.*;

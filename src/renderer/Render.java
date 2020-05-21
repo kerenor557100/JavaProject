@@ -98,8 +98,8 @@ public class Render {
 
         Material material = coloredPoint.getGeometry().getMaterial();
         int nShininess = material.getnShininess();
-        double kd = material.getKd();
-        double ks = material.getKs();
+        double kd = material.getkD();
+        double ks = material.getkS();
 
         if (lightSources != null) {
             for (LightSource lightSource : lightSources) {

@@ -12,6 +12,7 @@ import scene.*;
  * Test rendering abasic image
  *
  * @author Dan
+ * מחלקת טסטים שקיבלנו בשלב 6
  */
 public class RenderTest{
 

@@ -15,9 +15,6 @@ import java.util.List;
 import static geometries.Intersectable.GeoPoint;
 import static primitives.Util.alignZero;
 
-/**
- * //TODO you !!!
- */
 public class Render {
     private final ImageWriter _imageWriter;
     private final Scene _scene;
@@ -99,7 +96,7 @@ public class Render {
         Material material = coloredPoint.getGeometry().getMaterial();
         int nShininess = material.getnShininess();
         double kd = material.getkD();
-        double ks = material.getkS();
+        double ks = material.getkD();
 
         if (lightSources != null) {
             for (LightSource lightSource : lightSources) {
@@ -158,12 +155,6 @@ public class Render {
      * @param nl dot-product n*l
      * @param ip light intensity at the point
      * @return diffusive component of light reflection
-     * @author Dan Zilberstein
-     * <p>
-     * The diffuse component is that dot product n•L that we discussed in class. It approximates light, originally
-     * from light source L, reflecting from a surface which is diffuse, or non-glossy. One example of a non-glossy
-     * surface is paper. In general, you'll also want this to have a non-gray color value,
-     * so this term would in general be a color defined as: [rd,gd,bd](n•L)
      */
     private Color calcDiffusive(double kd, double nl, Color ip) {
         if (nl < 0) {

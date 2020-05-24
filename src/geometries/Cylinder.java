@@ -4,32 +4,35 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
- * Cylinder is afinite Tube with a certain _height
+ * A Tube with a certain _height
  */
 public class Cylinder extends Tube {
-    /**
-     *
-     */
+
     private double _height;
 
+
+
+    public double get_height() {
+        return _height;
+    }
     /**
      * Cylinder constructor
      *
-     * @param _radius
-     * @param _ray
-     * @param _height
+     * @param _radius רradius of the Cylinder
+     * @param _ray    direction and reference point  of the cylinder
+     * @param _height height of the cylinder (from the referenced point)
      */
     public Cylinder(double _radius, Ray _ray, double _height) {
         super(_radius, _ray);
         this._height = _height;
     }
-
     /**
      * @param point point to calculate the normal
      * @return normal
@@ -59,16 +62,13 @@ public class Cylinder extends Tube {
     @Override
     public List<GeoPoint> findIntersections(Ray ray) {
         List<GeoPoint> intersections = super.findIntersections(ray);
+        List<GeoPoint> result = new LinkedList<>();
         if (intersections != null) {
             for (GeoPoint geoPoint : intersections) {
-                geoPoint._geometry = this;
+                result.add(new GeoPoint(this, geoPoint.getPoint()));
             }
+            return result;
         }
-        return intersections;
-    }
-
-
-    public double get_height() {
-        return _height;
+        return null;
     }
 }

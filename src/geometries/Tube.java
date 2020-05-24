@@ -28,12 +28,7 @@ public class Tube extends RadialGeometry {
 
     /**
      * constructor for a new Cylinder object
-     *
-     * @param _radius       the radius of the tube
-     * @param _ray          the direction of the tube from a center point
-     * @param _material     the material of the tube
-     * @param emissionLight the emission light of the tube
-     * @throws Exception in case of a negative radius
+     * @throws Exception in case of negative or zero radius from RadialGeometry constructor
      */
     public Tube(Color emissionLight, Material _material, double _radius, Ray _ray) {
         super(Color.BLACK, _radius);
@@ -49,27 +44,6 @@ public class Tube extends RadialGeometry {
     public Tube(Color emissionLight, double _radius, Ray _ray) {
         this(emissionLight, new Material(0, 0, 0), _radius, _ray);
     }
-
-
-//  TODO   public boolean equals(Object obj)
-
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null || !(obj instanceof Tube))
-//            return false;
-//        if (this == obj)
-//            return true;
-//        Tube other = (Tube) obj;
-//
-//        //the two vectors needs to be in the same direction,
-//        //but not necessary to have the same length.
-//        try {
-//            Vector v = _ray.getDirection().crossProduct(other._ray.getDirection());
-//        } catch (IllegalArgumentException ex) {
-//            return (Util.isZero(this._radius - other._radius) && _ray.getPoint().equals((_ray.getPoint())));
-//        }
-//        throw new IllegalArgumentException("direction cross product with parameter.direction == Vector(0,0,0)");
-//    }
 
     @Override
     public String toString() {
@@ -102,12 +76,7 @@ public class Tube extends RadialGeometry {
     }
 
     @Override
-    public Vector getNormal() {
-        return null;
-    }
-
-    @Override
-    public List<GeoPoint> findIntersections(Ray anotherray) {
+    public List<GeoPoint> findIntersections(Ray anotherray, double maxDistance) {
         //TODO implementation
 
         Point3D P = anotherray.getPoint();

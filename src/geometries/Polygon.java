@@ -6,6 +6,7 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -17,7 +18,7 @@ import static primitives.Util.isZero;
  *
  * @author Dan
  */
-public class Polygon extends Geometry {
+public class Polygon extends FlatGeometry {
     /**
      * List of polygon's vertices
      */
@@ -50,7 +51,7 @@ public class Polygon extends Geometry {
      */
     public Polygon(Color emissionLight, Material material, Point3D... vertices) {
 
-        super(emissionLight,material);
+        super(emissionLight, material);
 
         if (vertices.length < 3)
             throw new IllegalArgumentException("A polygon can't have less than 3 vertices");
@@ -91,10 +92,11 @@ public class Polygon extends Geometry {
     }
 
     public Polygon(Color emissionLight, Point3D... vertices) {
-        this(emissionLight,new Material(0,0,0),vertices);
+        this(emissionLight, new Material(0, 0, 0), vertices);
     }
+
     public Polygon(Point3D... vertices) {
-        this(Color.BLACK,new Material(0,0,0),vertices);
+        this(Color.BLACK, new Material(0, 0, 0), vertices);
 //        this(new Color(java.awt.Color.RED),new Material(0,0,0),vertices);
     }
 
@@ -104,20 +106,15 @@ public class Polygon extends Geometry {
     }
 
     @Override
-    public Vector getNormal() {
-        return null;
-    }
-
-    @Override
-    public List<GeoPoint> findIntersections(Ray ray) {
-        List<GeoPoint> intersections = _plane.findIntersections(ray);
-        if (intersections == null)
+    public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
+        List<GeoPoint> planeIntersections = _plane.findIntersections(ray, maxDistance);
+        if (planeIntersections == null)
             return null;
 
         Point3D p0 = ray.getPoint();
         Vector v = ray.getDirection();
 
-        Vector v1  = _vertices.get(1).subtract(p0);
+        Vector v1 = _vertices.get(1).subtract(p0);
         Vector v2 = _vertices.get(0).subtract(p0);
         double sign = v.dotProduct(v1.crossProduct(v2));
         if (isZero(sign))
@@ -130,11 +127,14 @@ public class Polygon extends Geometry {
             v2 = _vertices.get(i).subtract(p0);
             sign = alignZero(v.dotProduct(v1.crossProduct(v2)));
             if (isZero(sign)) return null;
-            if (positive != (sign >0)) return null;
+            if (positive != (sign > 0)) return null;
         }
 
-        intersections.get(0)._geometry = this;
-
-        return intersections;
+        //for GeoPoint
+        List<GeoPoint> result = new LinkedList<>();
+        for (GeoPoint geo : planeIntersections) {
+            result.add(new GeoPoint(this, geo.getPoint()));
+        }
+        return result;
     }
 }

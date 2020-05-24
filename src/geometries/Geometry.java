@@ -17,9 +17,9 @@ public abstract class Geometry implements Intersectable {
     protected Material _material;
 
 
-    public Geometry(Color _emission, Material _material) {
-        this._emission = _emission;
-        this._material = _material;
+    public Geometry(Color emission, Material material) {
+        this._emission = new Color(emission);
+        this._material = new Material(material);
     }
 
     public Geometry(Color _emission) {
@@ -39,6 +39,4 @@ public abstract class Geometry implements Intersectable {
     }
 
     abstract public Vector getNormal(Point3D p);
-
-    public abstract Vector getNormal();
 }

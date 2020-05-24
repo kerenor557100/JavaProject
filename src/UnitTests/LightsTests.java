@@ -1,5 +1,6 @@
-package elements;
+package UnitTests;
 
+import elements.*;
 import geometries.Sphere;
 import geometries.Triangle;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ public class LightsTests {
 
     /**
      * Produce a picture of a sphere lighted by a directional light
+     * מחלקה שקיבלנו בשלב 6
      */
     @Test
     public void sphereDirectional() {

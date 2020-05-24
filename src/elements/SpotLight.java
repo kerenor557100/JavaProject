@@ -3,27 +3,41 @@ package elements;
 import primitives.Color;
 import primitives.Point3D;
 import primitives.Vector;
+import primitives.Util;
 //מקור אור זרקור: מקור אור נקודתי עם כיוון ועם מיקום.
-public class SpotLight extends PointLight{
+public class SpotLight extends PointLight {
     Vector _direction;
+    double _concentration;
 
-    public SpotLight(Color colorIntensity, Point3D _position, Vector _direction, double _kC, double _kL, double _kQ) {
-        super(colorIntensity,_position,_kC,_kL,_kQ);
-        this._direction = new Vector(_direction).normalized();
+    public SpotLight(Color colorIntensity, Point3D position, Vector direction, double kC, double kL, double kQ, double concentration) {
+        super(colorIntensity, position, kC, kL, kQ);
+        this._direction = new Vector(direction).normalized();
+        this._concentration = concentration;
     }
 
+    public SpotLight(Color colorIntensity, Point3D position, Vector direction, double kC, double kL, double kQ) {
+        this(colorIntensity, position, direction, kC, kL, kQ, 1);
+    }
+
+
+    /**
+     * @return spotlight intensity
+     */
     @Override
     public Color getIntensity(Point3D p) {
-        //TODO fix extremes values
-        Color pointLightIntensity = super.getIntensity(p);
         double projection = _direction.dotProduct(getL(p));
 
-        Color IL = pointLightIntensity.scale(Math.max(0,projection));
-        return IL;
+        if (Util.isZero(projection)) {
+            return Color.BLACK;
+        }
+        double factor = Math.max(0, projection);
+        Color pointlightIntensity = super.getIntensity(p);
+
+        if (_concentration != 1) {
+            factor = Math.pow(factor, _concentration);
+        }
+
+        return (pointlightIntensity.scale(factor));
     }
 
-    @Override
-    public Vector getL(Point3D p) {
-        return _direction;
-    }
 }

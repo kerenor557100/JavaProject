@@ -1,4 +1,5 @@
 package UnitTests;
+
 import org.junit.Test;
 
 import elements.*;
@@ -13,7 +14,7 @@ import scene.Scene;
  * (with transparency)
  *
  * @author dzilb
- *
+ *מחלקת טסטים שקיבלנו בשלב 7
  */
 public class ReflectionRefractionTests {
 

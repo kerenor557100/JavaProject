@@ -26,7 +26,10 @@ public class Camera {
 
     }
 
-
+    /**
+     *
+     *getters
+     */
     public Point3D getP0() {
         return new Point3D(_p0);
     }

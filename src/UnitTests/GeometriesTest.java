@@ -1,9 +1,7 @@
 package UnitTests;
 
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-
+//לא נדרש לפרוייקט
 public class GeometriesTest {
 
     @Test

@@ -24,19 +24,12 @@ public class Triangle extends Polygon {
     }
 
 
-    @Override
-    public String toString() {
-        String result = "";
-        for (Point3D p : _vertices) {
-            result += p.toString();
-        }
-        return result;
-    }
+
 
     @Override
-    public List<GeoPoint> findIntersections(Ray ray) {
-        List<GeoPoint> intersections = _plane.findIntersections(ray);
-        if (intersections == null) return null;
+    public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
+        List<GeoPoint> planeIntersections = _plane.findIntersections(ray, maxDistance);
+        if (planeIntersections == null) return null;
 
         Point3D p0 = ray.getPoint();
         Vector v = ray.getDirection();
@@ -52,10 +45,23 @@ public class Triangle extends Polygon {
         double s3 = v.dotProduct(v3.crossProduct(v1));
         if (isZero(s3)) return null;
 
-        //for GeoPoint
-        intersections.get(0)._geometry = this;
+        if ((s1 > 0 && s2 > 0 && s3 > 0) || (s1 < 0 && s2 < 0 && s3 < 0)) {
+            //for GeoPoint
+            for (GeoPoint geo : planeIntersections) {
+                geo._geometry = this;
+            }
+            return planeIntersections;
+        }
 
-        return ((s1 > 0 && s2 > 0 && s3 > 0) || (s1 < 0 && s2 < 0 && s3 < 0)) ? intersections : null;
+        return null;
 
+    }
+    @Override
+    public String toString() {
+        String result = "";
+        for (Point3D p : _vertices) {
+            result += p.toString();
+        }
+        return result;
     }
 }

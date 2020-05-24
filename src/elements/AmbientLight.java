@@ -8,7 +8,7 @@ public class AmbientLight  extends  Light{
 //        this._intensity = _intensity;
 //    }
 //keren or and avital
-    public AmbientLight(Color _intensity, double ka) {
-        super(_intensity.scale(ka));
-    }
+public AmbientLight(Color ia, double ka) {
+    this._intensity = ia.scale(ka);
+}
 }

@@ -4,6 +4,7 @@ package primitives;
  * Util class is used for some internal utilities, e.g. controlling accuracy
  *
  * @author keren or and avital
+ * קיבלנו בתחילת הפרוייקט והוספנו כמה הערות
  */
 //מחלקה אבסטרקטית בעלת פונקציונליות בסיסיות שנעזר בהם במהלך הפרוייקט
 public abstract class Util {

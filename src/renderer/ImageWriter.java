@@ -15,6 +15,7 @@ import java.io.IOException;
  * The class although is responsible of holding image related parameters
  * of View Plane - pixel matrix size and resolution
  * @author Dan
+ * קיבלנו את זה מוכן בשלב 5
  */
 //מחלקה המקבלת סצנה ומעבירה אותה למסך
 public class ImageWriter {

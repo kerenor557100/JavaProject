@@ -9,18 +9,12 @@ import java.util.List;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
-public class Plane extends Geometry {
-
+public class Plane extends FlatGeometry {
+    /**
+     * this is a flat geometry.
+     */
     Point3D _p; //Q
     Vector _normal;
-
-    public Point3D get_p() {
-        return _p;
-    }
-
-    public Vector get_normal() {
-        return _normal;
-    }
 
     public Plane(Color emissionLight, Material material, Point3D p1, Point3D p2, Point3D p3) {
         super(emissionLight, material);
@@ -29,12 +23,11 @@ public class Plane extends Geometry {
 
         Vector U = new Vector(p1, p2);
         Vector V = new Vector(p1, p3);
+
         Vector N = U.crossProduct(V);
         N.normalize();
 
         _normal = N;
-//        _normal = N.scale(-1);
-
     }
 
     public Plane(Color emissionLight, Point3D p1, Point3D p2, Point3D p3) {
@@ -63,7 +56,7 @@ public class Plane extends Geometry {
     }
 
     @Override
-    public List<GeoPoint> findIntersections(Ray ray) {
+    public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
         Vector p0Q;
         try {
             p0Q = _p.subtract(ray.getPoint());
@@ -76,13 +69,13 @@ public class Plane extends Geometry {
             return null;
 
         double t = alignZero(_normal.dotProduct(p0Q) / nv);
+        double tdist = alignZero(maxDistance - t);
 
-        if (t <= 0) {
+        if ((t <= 0) || (tdist <= 0)) {
             return null;
+        } else {
+            return List.of(new GeoPoint(this, ray.getTargetPoint(t)));
         }
-
-        GeoPoint geo = new GeoPoint(this, ray.getPoint(t));
-        return List.of(geo);
     }
 
 }

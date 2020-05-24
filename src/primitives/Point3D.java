@@ -1,79 +1,79 @@
 package primitives;
 
+/**
+ * Class Point3D is the basic class representing a point in a
+ * 3D system.
+ */
 public class Point3D {
-    private  Coordinate _x;
-    private Coordinate _y;
-    private Coordinate _z;
-    public  final static Point3D ZERO = new Point3D(new Coordinate(0.0),new Coordinate(0.0),new Coordinate(0.0));
+    Coordinate _x;
+    Coordinate _y;
+    Coordinate _z;
 
     /**
-     *  Builders that receive:
-     *  a) three coordinates,
-     *  b) three double-digit numbers,
-     *  c) a point
-     * @param _x
-     * @param _y
-     * @param _z
+     * @param _x  the X axis
+     * @param _y  the Y axis
+     * @param _z  the Z axis
      */
-    public Point3D(Coordinate _x, Coordinate _y, Coordinate _z)
-    {
+    public final static Point3D ZERO = new Point3D(0.0, 0.0, 0.0);
+
+    public Point3D(Coordinate _x, Coordinate _y, Coordinate _z) {
         this._x = _x;
         this._y = _y;
         this._z = _z;
     }
-    public Point3D(Point3D other)
-    {
-        Point3D p2=new Point3D(other._x,other._y,other._z);
-        this._x = p2._x;
-        this._y = p2._y;
-        this._z = p2._z;
-    }
-    public Point3D(double _x,double _y,double _z)
-    {
-        Coordinate coorX =new Coordinate(_x);
-        Coordinate coorY =new Coordinate(_y);
-        Coordinate coorZ =new Coordinate(_z);
 
-
-        this._x = coorX;
-        this._y = coorY;
-        this._z = coorZ;
+    public Point3D(Point3D p) {
+        this._x = new Coordinate(p._x);
+        this._y = new Coordinate(p._y);
+        this._z = new Coordinate(p._z);
     }
 
-    /**
-     *  get and set functions
-     */
 
+    public Point3D(double _x, double _y, double _z) {
+        this(new Coordinate(_x), new Coordinate(_y), new Coordinate(_z));
+    }
 
     public Coordinate get_x() {
-        return _x;
-    }
-
-    public void set_x(Coordinate _x) {
-        this._x = _x;
+        return new Coordinate(_x);
     }
 
     public Coordinate get_y() {
-        return _y;
-    }
-
-    public void set_y(Coordinate _y) {
-        this._y = _y;
+        return new Coordinate(_y);
     }
 
     public Coordinate get_z() {
-        return _z;
+        return new Coordinate(_z);
+    }
+//פעולות חשבון על הנקודה התלת מימדית
+    public double distanceSquared(Point3D other)
+    {
+        return ( (other._x._coord - this._x._coord) * (other._x._coord - this._x._coord) +
+                (other._y._coord - this._y._coord) * (other._y._coord - this._y._coord) +
+                (other._z._coord - this._z._coord) * (other._z._coord - this._z._coord));
+    }
+    public double distance (Point3D other){
+        return Math.sqrt(distanceSquared(other));
     }
 
-    public void set_z(Coordinate _z) {
-        this._z = _z;
+    public Point3D add(Vector v) {
+        return new Point3D(this._x._coord + v._head._x._coord,
+                this._y._coord + v._head._y._coord,
+                this._z._coord + v._head._z._coord);
     }
 
-    /**
-     * override equals
-     * @param o
-     * @return if equals (boolian)
-     */
+    public Point3D subtract(Vector v) {
+        return new Point3D(this._x._coord - v._head._x._coord,
+                this._y._coord - v._head._y._coord,
+                this._z._coord - v._head._z._coord);
+    }
+
+    public Vector subtract(Point3D p) {
+        return new Vector(new Point3D(
+                this._x._coord - p._x._coord,
+                this._y._coord - p._y._coord,
+                this._z._coord - p._z._coord));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -84,83 +84,14 @@ public class Point3D {
                 _z.equals(point3D._z);
     }
 
-    /**
-     * add - Adds a vector to a point -
-     * returns a new point
-     * @param p2
-     * @return
-     */
-
-    public Vector subtract (Point3D p2) {
-
-        double dX = (this._x.get() - p2._x.get());
-        double dY = (this._y.get() - p2._y.get());
-        double dZ = (this._z.get() - p2._z.get());
-        return new Vector(new Point3D(new Coordinate(dX), new Coordinate(dY), new Coordinate(dZ)));
-
-
-
-    }
-
-    /**
-     * distanceSquared - The squeeze between two squares
-     * @param p2
-     * @return distance before doing sqrt
-     */
-    public double distanceSquared(Point3D p2) {
-        if (this.equals(p2) == true)
-            return 0.0;
-        else {
-            double dX = (this._x.get() - p2._x.get());
-            double dY = (this._y.get() - p2._y.get());
-            double dZ = (this._z.get() - p2._z.get());
-
-            return ((dX * dX) + (dY * dY) + (dZ * dZ));
-
-        }
-    }
-
-    /**
-     * distance - distance between 2 points
-     * @param p2
-     * @return distance
-     */
-    public double distance(Point3D p2)
-    {
-
-        return Math.sqrt(this.distanceSquared(p2));
-
-
-    }
-
-    /**
-     * subtract - vector subtraction - receives a second
-     * point in the parameter, returns a vector from the second point
-     * to the point at which the operation is performed
-     * @param vec
-     * @return Point3D
-     */
-    public Point3D add(Vector vec) {
-
-        double dX = (this._x.get() + vec.get_head()._x.get());
-        double dY = (this._y.get() + vec.get_head()._y.get());
-        double dZ = (this._z.get() + vec.get_head()._z.get());
-
-        return new Point3D(new Coordinate(dX),new Coordinate(dY),new Coordinate(dZ));
-
-
-    }
-
-    /**
-     * to string fun override
-     * @return string
-     */
     @Override
     public String toString() {
-        return "Point3D{" +
-                "_x=" + _x +
-                ", _y=" + _y +
-                ", _z=" + _z +
-                '}';
+        return "(" +
+                _x +
+                ", " + _y +
+                ", " + _z +
+                ')';
     }
+
+
 }

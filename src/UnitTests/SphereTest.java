@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 
 /**
  * Unit tests for geometries.Sphare class
- * @author elyasaf and omer
+ * @author keren or and avital
  */
 public class SphereTest {
 

@@ -6,7 +6,7 @@ import primitives.Color;
 /**
  * all the geometries who did not extends radialgeometry
  *
- * we did not decalre it as an interface
+ * we didn't decalre it as an interface
  */
 public abstract class FlatGeometry extends Geometry {
 

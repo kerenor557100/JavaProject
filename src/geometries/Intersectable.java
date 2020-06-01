@@ -6,7 +6,7 @@ import primitives.*;
 import java.util.List;
 
 /**
- * a class for all geometries that are able
+ * Intersectable is a common interface for all geometries that are able
  * to intersect from a ray to their entity (Shape)
  */
 public interface Intersectable {
@@ -22,8 +22,7 @@ public interface Intersectable {
     List<GeoPoint> findIntersections(Ray ray, double maxDistance);
 
     /**
-     * GeoPoint is just a tuple holding
-     * references to a specific point ain a specific geometry
+     *  a specific point in a specific geometry
      */
     class GeoPoint {
 
@@ -37,6 +36,16 @@ public interface Intersectable {
 
         public Point3D getPoint() {
             return point;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            GeoPoint geoPoint = (GeoPoint) o;
+
+            return ((_geometry.equals(geoPoint._geometry)) && (point.equals(geoPoint.point)));
         }
 
         public Geometry getGeometry() {

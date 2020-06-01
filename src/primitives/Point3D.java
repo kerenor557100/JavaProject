@@ -1,8 +1,9 @@
 package primitives;
 
 /**
- * Class Point3D is the basic class representing a point in a
- * 3D system.
+ * Class Point3D is a basic class for this project
+ *
+ * @author keren or and avital
  */
 public class Point3D {
     Coordinate _x;
@@ -10,9 +11,9 @@ public class Point3D {
     Coordinate _z;
 
     /**
-     * @param _x  the X axis
-     * @param _y  the Y axis
-     * @param _z  the Z axis
+     * @param _x coordinate on the X axis
+     * @param _y coordinate on the Y axis
+     * @param _z coordinate on the Z axis
      */
     public final static Point3D ZERO = new Point3D(0.0, 0.0, 0.0);
 
@@ -33,18 +34,18 @@ public class Point3D {
         this(new Coordinate(_x), new Coordinate(_y), new Coordinate(_z));
     }
 
-    public Coordinate get_x() {
+    public Coordinate getX() {
         return new Coordinate(_x);
     }
 
-    public Coordinate get_y() {
+    public Coordinate getY() {
         return new Coordinate(_y);
     }
 
-    public Coordinate get_z() {
+    public Coordinate getZ() {
         return new Coordinate(_z);
     }
-//פעולות חשבון על הנקודה התלת מימדית
+
     public double distanceSquared(Point3D other)
     {
         return ( (other._x._coord - this._x._coord) * (other._x._coord - this._x._coord) +
@@ -60,7 +61,14 @@ public class Point3D {
                 this._y._coord + v._head._y._coord,
                 this._z._coord + v._head._z._coord);
     }
-
+    @Override
+    public String toString() {
+        return "(" +
+                _x +
+                ", " + _y +
+                ", " + _z +
+                ')';
+    }
     public Point3D subtract(Vector v) {
         return new Point3D(this._x._coord - v._head._x._coord,
                 this._y._coord - v._head._y._coord,
@@ -84,14 +92,7 @@ public class Point3D {
                 _z.equals(point3D._z);
     }
 
-    @Override
-    public String toString() {
-        return "(" +
-                _x +
-                ", " + _y +
-                ", " + _z +
-                ')';
-    }
+   
 
 
 }

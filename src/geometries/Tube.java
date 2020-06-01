@@ -1,5 +1,8 @@
 package geometries;
-
+/**
+ * Represents an infinite tube in the 3D space.
+ *  the cylinder does not have a length.
+ */
 import elements.Material;
 import primitives.Color;
 import primitives.Point3D;
@@ -11,15 +14,7 @@ import java.util.List;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
-/**
- * Represents an infinite tube in the 3D space.
- * That is, the cylinder does not have a length.
- */
-
 public class Tube extends RadialGeometry {
-    public Ray getRay() {
-        return _ray;
-    }
 
     /**
      * represents the direction and the reference point
@@ -28,7 +23,6 @@ public class Tube extends RadialGeometry {
 
     /**
      * constructor for a new Cylinder object
-     * @throws Exception in case of negative or zero radius from RadialGeometry constructor
      */
     public Tube(Color emissionLight, Material _material, double _radius, Ray _ray) {
         super(Color.BLACK, _radius);
@@ -45,6 +39,14 @@ public class Tube extends RadialGeometry {
         this(emissionLight, new Material(0, 0, 0), _radius, _ray);
     }
 
+    public Ray getRay() {
+        return _ray;
+    }
+
+
+//  TODO   public boolean equals(Object obj)
+
+//
     @Override
     public String toString() {
         return "ray: " + _ray +
@@ -52,13 +54,13 @@ public class Tube extends RadialGeometry {
     }
 
     /**
-     * @param point point to calculate the normal
+     * @param point
      * @return returns normal vector
      */
     @Override
     public Vector getNormal(Point3D point) {
         //The vector from the point of the cylinder to the given point
-        Point3D o = _ray.getPoint(); // at this point o = p0
+        Point3D o = _ray.getPoint(); // 0
         Vector v = _ray.getDirection();
 
         Vector vector1 = point.subtract(o);
@@ -70,7 +72,7 @@ public class Tube extends RadialGeometry {
             o = o.add(v.scale(projection));
         }
 
-        //This vector is orthogonal to the _direction vector.
+        // orthogonal to the _direction vector.
         Vector check = point.subtract(o);
         return check.normalize();
     }

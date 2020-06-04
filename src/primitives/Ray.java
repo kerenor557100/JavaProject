@@ -6,9 +6,7 @@ import java.util.Random;
 
 import static primitives.Util.isZero;
 
-/**
- * Ray class
- */
+
 public class Ray {
 
     private static final double DELTA = 0.1;
@@ -57,7 +55,6 @@ public class Ray {
     /**
      * @param length length to reach the target point
      * @return new Point3D
-     * @author Dan Zilberstein
      */
     public Point3D getTargetPoint(double length) {
         if (isZero(length)) {
@@ -91,6 +88,8 @@ public class Ray {
     }
 
     /**
+     * Getter for the point from which the ray starts.
+     *
      * @return A new Point3D that represents the
      * point from which the ray starts.
      */
@@ -99,6 +98,9 @@ public class Ray {
     }
 
     /**
+     * Getter for the direction of the ray that is
+     * represented by this object.
+     *
      * @return A new Vector that represents the
      * direction of the ray that is
      * represented by this object.
@@ -107,29 +109,38 @@ public class Ray {
         return _direction.normalized();
     }
 
-    public List<Ray> constructRayBeamThroughPixel(Ray originalRay, Point3D targetPoint, double delta, int amount) {
-       
-        if (isZero(originalRay.getPoint().distance(targetPoint))) {
+    public List<Ray> constructRayBeamThroughPixel(Point3D targetPoint, double delta, int amount) {
+        if (isZero(_point.distance(targetPoint))) {
             throw new IllegalArgumentException("distance cannot be 0");
         }
-        Vector direction = originalRay.getDirection();
+        Vector direction = this._direction;
         Point3D point = direction.getHead();
 
-        Vector n1 = new Vector(point.getY()._coord * -1d, point.getX()._coord, 0d);
-        Vector n2 = new Vector(point.getY()._coord, point.getX()._coord * -1d, 0d);
+        Vector v = this._point.subtract(targetPoint);
+        Point3D referPoint = v.getHead();
+
+        //TODO verify that n1 and n2 are normals to originalRay.getDirection()
+        Vector n1 = new Vector(referPoint.getY()._coord * -1d, referPoint.getX()._coord, 0d).normalized();
+        Vector n2 = direction.crossProduct(n1).normalized();
         double x;
         double y;
 
 
         LinkedList<Ray> rays = new LinkedList<>();
+        rays.add(this);
 
-        double[] doubles = rnd.doubles(amount * 2, -1 * delta, delta).distinct().toArray();
+        double[] doubles = rnd.doubles(amount * 2, -1 * delta, delta)
+                .distinct()
+                .toArray();
+
         for (int i = 0; i < doubles.length; i++) {
-            Point3D Pxy = targetPoint;
             x = doubles[i];
             y = doubles[++i];
-            Pxy = Pxy.add(n1.scale(x)).add(n2.scale(y));
-            rays.add(new Ray(point, point.subtract(point)));
+
+            Point3D Pxy = point.add(n1.scale(x)).add(n2.scale(y));
+            Vector Vxy = Pxy.subtract(point);
+
+            rays.add(new Ray(point, Vxy));
         }
         return rays;
 

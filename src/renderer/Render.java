@@ -1,4 +1,5 @@
 package renderer;
+
 import elements.AmbientLight;
 import elements.Camera;
 import elements.LightSource;
@@ -19,11 +20,11 @@ import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
- * Keren Or and Avital
+ *
  */
 public class Render {
     private static final int MAX_CALC_COLOR_LEVEL = 10;
-    private static final double MIN_CALC_COLOR_K = 0.001;
+    private static final double MIN_CALC_COLOR_K = 0.0001;
 
     private final ImageWriter _imageWriter;
     private final Scene _scene;
@@ -90,17 +91,17 @@ public class Render {
                 for (int collumn = 0; collumn < Nx; collumn++) {
                     Ray ray = camera.constructRayThroughPixel(Nx, Ny, collumn, row, distance, width, height);
                     GeoPoint closestPoint = findClosestIntersection(ray);
-                    List<Ray> rays = ray.constructRayBeamThroughPixel(ray, closestPoint.getPoint(), _supersamplingDensity, 50);
+                    List<Ray> rayBeam = ray.constructRayBeamThroughPixel(closestPoint.getPoint(), _supersamplingDensity, 50);
                     Color averageColor = Color.BLACK;
                     Color Bckg = new Color(background);
-                    for (Ray r : rays) {
+                    for (Ray r : rayBeam) {
                         closestPoint = findClosestIntersection(r);
                         if (closestPoint == null) {
                             averageColor = averageColor.add(Bckg);
                         } else {
                             averageColor = averageColor.add(calcColor(closestPoint, ray));
                         }
-                        averageColor.scale(1d / rays.size());
+                        averageColor.scale(1d / rayBeam.size());
                     }
                     _imageWriter.writePixel(collumn, row, averageColor.getColor());
                 }
@@ -130,7 +131,14 @@ public class Render {
         return result;
     }
 
-    
+    /**
+     * Find intersections of a ray with the scene geometries and get the
+     * intersection point that is closest to the ray head. If there are no
+     * intersections, null will be returned.
+     *
+     * @param ray intersecting the scene
+     * @return the closest point
+     */
     private GeoPoint findClosestIntersection(Ray ray) {
 
         if (ray == null) {
@@ -219,8 +227,13 @@ public class Render {
                 double nl = n.dotProduct(l);
                 double nv = n.dotProduct(v);
                 double ktr;
+                // nl != 0 && nv != 0 && sign(nv)==sign(nl)
                 if (nl * nv > 0) {
-
+//                if (unshaded(lightSource, l, n, geoPoint)) {
+//                    ktr = 1d;
+//                } else {
+//                    ktr = 0d;
+//                }
                     ktr = transparency(lightSource, l, n, geoPoint);
                     if (ktr * k > MIN_CALC_COLOR_K) {
                         Color lightIntensity = lightSource.getIntensity(pointGeo).scale(ktr);
@@ -263,7 +276,7 @@ public class Render {
      * @param nShininess shininess level
      * @param ip         light intensity at the point
      * @return specular component light effect at the point
-    
+
      */
     private Color calcSpecular(double ks, Vector l, Vector n, double nl, Vector V, int nShininess, Color ip) {
         double p = nShininess;
@@ -286,7 +299,7 @@ public class Render {
      * @param nl dot-product n*l
      * @param ip light intensity at the point
      * @return diffusive component of light reflection
-    
+
      */
     private Color calcDiffusive(double kd, double nl, Color ip) {
         return ip.scale(Math.abs(nl) * kd);

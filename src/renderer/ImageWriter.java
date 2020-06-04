@@ -15,9 +15,7 @@ import java.io.IOException;
  * The class although is responsible of holding image related parameters
  * of View Plane - pixel matrix size and resolution
  * @author Dan
- * קיבלנו את זה מוכן בשלב 5
  */
-//מחלקה המקבלת סצנה ומעבירה אותה למסך
 public class ImageWriter {
     private double _imageWidth, _imageHeight;
     private int _nX, _nY;
@@ -74,12 +72,13 @@ public class ImageWriter {
     // ***************** Operations ******************** //
 
     /**
+     /**
      * Function writeToImage produces unoptimized jpeg file of
      * the image according to pixel color matrix in the directory
      * of the project
      */
     public void writeToImage(){
-        File ouFile = new File(PROJECT_PATH + "/" + _imageName + ".jpg");
+        File ouFile = new File(PROJECT_PATH + "/IMAGES/" + _imageName + ".jpg");
         try {
             javax.imageio.ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
             ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();

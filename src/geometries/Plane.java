@@ -9,26 +9,32 @@ import java.util.List;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
-public class Plane extends FlatGeometry {
+public class Plane extends Geometry {
 
     Point3D _p; //Q
     Vector _normal;
 
+    public Point3D get_p() {
+        return _p;
+    }
+
+    public Vector get_normal() {
+        return _normal;
+    }
+
     public Plane(Color emissionLight, Material material, Point3D p1, Point3D p2, Point3D p3) {
-        
         super(emissionLight, material);
-        //from FlatGeometry
-        this._plane = null;
 
         _p = new Point3D(p1);
 
         Vector U = new Vector(p1, p2);
         Vector V = new Vector(p1, p3);
-
         Vector N = U.crossProduct(V);
         N.normalize();
 
         _normal = N;
+//        _normal = N.scale(-1);
+
     }
 
     public Plane(Color emissionLight, Point3D p1, Point3D p2, Point3D p3) {
@@ -44,12 +50,16 @@ public class Plane extends FlatGeometry {
 
         this._p = new Point3D(_p);
         this._normal = new Vector(_normal);
-        this._plane = null;
     }
 
     @Override
     public Vector getNormal(Point3D p) {
         return _normal;
+    }
+
+    //because polygon needs geNormal without parameter
+    public Vector getNormal() {
+        return getNormal(null);
     }
 
     @Override
@@ -71,13 +81,7 @@ public class Plane extends FlatGeometry {
         if ((t <= 0) || (tdist <= 0)) {
             return null;
         } else {
-            return List.of(new GeoPoint(this, ray.getTargetPoint(t)));
+            return List.of(new GeoPoint(this, ray.getPoint(t)));
         }
-    }
-
-    @Override
-    //we need this for the tests
-    public long getNormal() {
-        return 0;
     }
 }

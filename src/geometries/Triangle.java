@@ -6,13 +6,11 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.isZero;
 
-/**
- * Triangle class
- */
 public class Triangle extends Polygon {
 
     public Triangle(Color emissionLight, Material material, Point3D p1, Point3D p2, Point3D p3) {
@@ -21,9 +19,12 @@ public class Triangle extends Polygon {
     public Triangle(Color emissionLight, Point3D p1, Point3D p2, Point3D p3) {
         super(emissionLight,p1, p2, p3);
     }
-//CTR
+
     public Triangle(Point3D p1, Point3D p2, Point3D p3) {
         super(p1, p2, p3);
+    }
+    public Vector getNormal() {
+        return super.getNormal(super._plane._p);
     }
 
 
@@ -37,8 +38,8 @@ public class Triangle extends Polygon {
     }
 
     @Override
-    public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
-        List<GeoPoint> planeIntersections = _plane.findIntersections(ray, maxDistance);
+    public List<GeoPoint> findIntersections(Ray ray) {
+        List<GeoPoint> planeIntersections = _plane.findIntersections(ray);
         if (planeIntersections == null) return null;
 
         Point3D p0 = ray.getPoint();
@@ -57,13 +58,13 @@ public class Triangle extends Polygon {
 
         if ((s1 > 0 && s2 > 0 && s3 > 0) || (s1 < 0 && s2 < 0 && s3 < 0)) {
             //for GeoPoint
+            List<GeoPoint> result = new LinkedList<>();
             for (GeoPoint geo : planeIntersections) {
-                geo._geometry = this;
+                result.add(new GeoPoint(this, geo.getPoint()));
             }
-            return planeIntersections;
+            return result;
         }
 
         return null;
 
-    }
-}
+    }}

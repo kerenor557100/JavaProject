@@ -4,6 +4,8 @@ import elements.AmbientLight;
 import elements.Camera;
 import elements.LightSource;
 import elements.Material;
+import geometries.FlatGeometry;
+import geometries.Geometry;
 import geometries.Intersectable;
 import primitives.Color;
 import primitives.Point3D;
@@ -11,6 +13,7 @@ import primitives.Ray;
 import primitives.Vector;
 import scene.Scene;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static geometries.Intersectable.GeoPoint;
@@ -21,16 +24,24 @@ import static primitives.Util.isZero;
  *
  */
 public class Render {
-    private static final int MAX_CALC_COLOR_LEVEL = 30;
-    private static final double MIN_CALC_COLOR_K = 0.0001;
-
+    private Scene scene;
+    private ImageWriter imageWriter;
+    private static final int MAX_CALC_COLOR_LEVEL = 10;
+    private static final double MIN_CALC_COLOR_K = 0.001;
+    private static  final int MAX_RAYS = 6;
     private final ImageWriter _imageWriter;
     private final Scene _scene;
+
+    private double _supersamplingRate;
 
     public Render(ImageWriter imageWriter, Scene scene) {
         this._imageWriter = imageWriter;
         this._scene = scene;
+        this._supersamplingRate = 0d;
     }
+
+
+
 
     public void printGrid(int interval, java.awt.Color color) {
         int Nx = _imageWriter.getNx();
@@ -60,27 +71,58 @@ public class Render {
         double width = _imageWriter.getWidth();
         double height = _imageWriter.getHeight();
 
-        for (int row = 0; row < Ny; row++) {
-            for (int collumn = 0; collumn < Nx; collumn++) {
-                Ray ray = camera.constructRayThroughPixel(Nx, Ny, collumn, row, distance, width, height);
-                GeoPoint closestPoint = findClosestIntersection(ray);
-                if (closestPoint == null) {
-                    _imageWriter.writePixel(collumn, row, background);
-                } else {
-                    _imageWriter.writePixel(collumn, row, calcColor(closestPoint, ray).getColor());
+        if (_supersamplingRate == 0d) {
+            for (int row = 0; row < Ny; row++) {
+                for (int collumn = 0; collumn < Nx; collumn++) {
+                    Ray ray = camera.constructRayThroughPixel(Nx, Ny, collumn, row, distance, width, height);
+                    GeoPoint closestPoint = findClosestIntersection(ray);
+                    if (closestPoint == null) {
+                        _imageWriter.writePixel(collumn, row, background);
+                    } else {
+                        _imageWriter.writePixel(collumn, row, calcColor(closestPoint, ray).getColor());
+                    }
                 }
+            }
+        } else {    //supersampling
+            for (int row = 0; row < Ny; row++) {
+                for (int collumn = 0; collumn < Nx; collumn++) {
+                    //    List<Ray> rays = camera.constructRayBeamThroughPixel(Nx, Ny, collumn, row, distance, width, height, _supersamplingRate);
+                    Color averageColor = Color.BLACK;
+                    //makes a list of the multiple rays that goes through different parts of the pixel
+                    List<Ray> rays = getRaysThroughPixel(row, collumn);
 
+                    //will store the colors in that pixel in a list later
+                    //  List<Color> raysColors = new ArrayList<>();
+
+                    Color Bckg = new Color(background);
+                    for (Ray ray : rays) {
+                        GeoPoint closestPoint = findClosestIntersection(ray);
+                        if (closestPoint == null) {
+                            averageColor = averageColor.add(Bckg);
+                        } else {
+                            averageColor = averageColor.add(calcColor(closestPoint, ray));
+                        }
+                        // averageColor.add(ambientLight.getIntensity());
+                        averageColor.scale(1d / rays.size());
+                    }
+
+                    _imageWriter.writePixel(collumn, row, averageColor.getColor());
+                }
             }
         }
     }
 
     private GeoPoint getClosestPoint(List<GeoPoint> intersectionPoints) {
+
+        if (intersectionPoints == null) {
+            return null;
+        }
+
         GeoPoint result = null;
 
         Point3D p0 = _scene.getCamera().getP0();
         double minDist = Double.MAX_VALUE;
-        double currentDistance = 0;
-
+        double currentDistance;
 
         for (GeoPoint geoPoint : intersectionPoints) {
             currentDistance = p0.distance(geoPoint.getPoint());
@@ -101,9 +143,11 @@ public class Render {
      * @return the closest point
      */
     private GeoPoint findClosestIntersection(Ray ray) {
+
         if (ray == null) {
             return null;
         }
+
         GeoPoint closestPoint = null;
         double closestDistance = Double.MAX_VALUE;
         Point3D ray_p0 = ray.getPoint();
@@ -115,8 +159,8 @@ public class Render {
         for (GeoPoint geoPoint : intersections) {
             double distance = ray_p0.distance(geoPoint.getPoint());
             if (distance < closestDistance) {
-                closestPoint = geoPoint;
                 closestDistance = distance;
+                closestPoint = geoPoint;
             }
         }
         return closestPoint;
@@ -124,68 +168,133 @@ public class Render {
 
     private Color calcColor(GeoPoint geoPoint, Ray inRay) {
         Color color = calcColor(geoPoint, inRay, MAX_CALC_COLOR_LEVEL, 1.0);
-        color = color.add(_scene.getAmbientLight().getIntensity());
+        // color = color.add(_scene.getAmbientLight().getIntensity());
         return color;
     }
 
     private Color calcColor(GeoPoint geoPoint, Ray inRay, int level, double k) {
-        if (level == 0 || k < MIN_CALC_COLOR_K) {
-            return Color.BLACK;
-        }
-        Color result = geoPoint.getGeometry().getEmissionLight();
-        Point3D pointGeo = geoPoint.getPoint();
-
-        Vector v = pointGeo.subtract(_scene.getCamera().getP0()).normalize();
-        Vector n = geoPoint.getGeometry().getNormal(pointGeo);
-
-        Material material = geoPoint.getGeometry().getMaterial();
-        int nShininess = material.getnShininess();
-        double kd = material.getkD();
-        double ks = material.getkS();
-        double kr = geoPoint.getGeometry().getMaterial().getKr();
-        double kt = geoPoint.getGeometry().getMaterial().getKt();
-        double kkr = k * kr;
-        double kkt = k * kt;
-
-        List<LightSource> lightSources = _scene.getLightSources();
-        if (lightSources != null) {
-            for (LightSource lightSource : lightSources) {
-                Vector l = lightSource.getL(pointGeo);
-                double nl = alignZero(n.dotProduct(l));
-                double nv = alignZero(n.dotProduct(v));
-                if (nl * nv > 0) {
-//                if (sign(nl) == sign(nv) && nl != 0 && nv != 0) {
-                    double ktr = transparency(lightSource, l, n, geoPoint);
-                    if (ktr * k > MIN_CALC_COLOR_K) {
-//                    if (unshaded(lightSource, l, n, geoPoint)) {
-                        Color ip = lightSource.getIntensity(pointGeo).scale(ktr);
-                        result = result.add(
-                                calcDiffusive(kd, nl, ip),
-                                calcSpecular(ks, l, n, nl, v, nShininess, ip));
-                    }
-                }
-            }
-        }
-
         if (level == 1) {
             return Color.BLACK;
         }
+
+        Point3D pointGeo = geoPoint.getPoint();
+        Geometry geometryGeo = geoPoint.getGeometry();
+        Color color = geometryGeo.getEmissionLight();
+
+        Material material = geometryGeo.getMaterial();
+        int nShininess = material.getnShininess();
+        double kd = material.getkD();
+        double ks = material.getkS();
+
+        Vector v = pointGeo.subtract(_scene.getCamera().getP0()).normalize();
+        Vector n = geometryGeo.getNormal(pointGeo);
+
+//        double nv = alignZero(n.dotProduct(v));
+//        if (nv == 0) {
+//            //ray parallel to geometry surface ??
+//            //and orthogonal to normal
+//            return Color.BLACK;
+//        }
+
+        color = getColorLightSources(geoPoint, k, color, v, n, nShininess, kd, ks);
+
+        double kr = geometryGeo.getMaterial().getKr();
+        double kkr = k * kr;
 
         if (kkr > MIN_CALC_COLOR_K) {
             Ray reflectedRay = constructReflectedRay(pointGeo, inRay, n);
             GeoPoint reflectedPoint = findClosestIntersection(reflectedRay);
             if (reflectedPoint != null) {
-                result = result.add(calcColor(reflectedPoint, reflectedRay, level - 1, kkr).scale(kr));
+                color = color.add(calcColor(reflectedPoint, reflectedRay, level - 1, kkr).scale(kr));
             }
         }
-        if (kkt > MIN_CALC_COLOR_K) {
-            Ray refractedRay = constructRefractedRay(pointGeo, inRay, n);
-            GeoPoint refractedPoint = findClosestIntersection(refractedRay);
-            if (refractedPoint != null) {
-                result = result.add(calcColor(refractedPoint, refractedRay, level - 1, kkt).scale(kt));
+        return color;
+    }
+//        double kt = geometryGeo.getMaterial().getKt();
+//        double kkt = k * kt;
+//
+//        if (kkt > MIN_CALC_COLOR_K) {
+//            Ray refractedRay = constructRefractedRay(pointGeo, inRay, n);
+//            GeoPoint refractedPoint = findClosestIntersection(refractedRay);
+//
+//            if (refractedPoint != null) {
+//                color = color.add(calcColor(refractedPoint, refractedRay, level - 1, kkt).scale(kt));
+//            }
+//        }
+
+    private Color getColorLightSources(GeoPoint geoPoint, double k, Color color,
+                                       Vector v, Vector n, int nShininess,
+                                       double kd, double ks)
+    {
+        Point3D pointGeo = geoPoint.getPoint();
+        if (_scene.getLightSources() != null) {
+            for (LightSource lightSource : _scene.getLightSources()) {
+
+
+                if (lightSource.getRadius() == 0) {
+                    Vector l = lightSource.getL(pointGeo);
+
+                    double nl = n.dotProduct(l);
+                    double nv = n.dotProduct(v);
+                    double ktr;
+                    if (nl * nv > 0) {
+//                if (unshaded(lightSource, l, n, geoPoint)) {
+                        //                  ktr = 1d;
+                        //             } else {
+                        //                 ktr = 0d;
+                        //               }
+                        ktr = transparency(lightSource, l, n, geoPoint);
+                        if (ktr * k > MIN_CALC_COLOR_K) {
+                            Color lightIntensity = lightSource.getIntensity(pointGeo).scale(ktr);
+                            color = color.add(
+                                    calcDiffusive(kd, nl, lightIntensity),
+                                    calcSpecular(ks, l, n, nl, v, nShininess, lightIntensity));
+                        }
+                    }
+                    return color;
+                }
+                else {
+                    double ktr=0.0;
+                    double sizeVecList=0.0;
+
+                    // double  nl2=0.0;
+                    double nv=0.0;
+
+                    for (LightSource lightSource2 : _scene.getLightSources())
+                        for (Vector vec : lightSource.getLs(pointGeo)) {
+                            sizeVecList += 1;
+                            double  nl = n.dotProduct(vec);
+
+                            nv = n.dotProduct(v);
+
+                            if (nl * nv > 0) {
+//                if (unshaded(lightSource, l, n, geoPoint)) {
+                                //                  ktr = 1d;
+                                //             } else {
+                                //                 ktr = 0d;
+                                //               }
+                                ktr += transparency(lightSource, vec, n, geoPoint);
+                            }
+                        }
+
+
+                    ktr = ktr / sizeVecList;
+                    Vector l = lightSource.getL(pointGeo);
+                    double nl = n.dotProduct(l);
+                    // double nl = n.dotProduct(l);
+                    if (ktr * k > MIN_CALC_COLOR_K) {
+                        Color lightIntensity = lightSource.getIntensity(pointGeo).scale(ktr);
+                        color = color.add(
+                                calcDiffusive(kd, nl, lightIntensity),
+                                calcSpecular(ks, l, n, nl, v, nShininess, lightIntensity));
+                    }
+                }
+                // return color;
             }
+            return color;
+
         }
-        return result;
+        return Color.BLACK;
     }
 
     private Ray constructRefractedRay(Point3D pointGeo, Ray inRay, Vector n) {
@@ -193,12 +302,14 @@ public class Render {
     }
 
     private Ray constructReflectedRay(Point3D pointGeo, Ray inRay, Vector n) {
-        //𝒓=𝒗−𝟐∙𝒗∙𝒏∙𝒏
+        //𝒓=𝒗 −𝟐∙(𝒗∙𝒏)∙𝒏
         Vector v = inRay.getDirection();
         double vn = v.dotProduct(n);
+
         if (vn == 0) {
             return null;
         }
+
         Vector r = v.subtract(n.scale(2 * vn));
         return new Ray(pointGeo, r, n);
     }
@@ -220,6 +331,7 @@ public class Render {
      * shiny way. This is defined by [rs,gs,bs](-V.R)^p, where R is the mirror reflection direction vector we discussed
      * in class (and also used for ray tracing), and where p is a specular power. The higher the value of p, the shinier
      * the surface.
+     * </p>
      */
     private Color calcSpecular(double ks, Vector l, Vector n, double nl, Vector V, int nShininess, Color ip) {
         double p = nShininess;
@@ -248,6 +360,7 @@ public class Render {
      * reflecting from a surface which is diffuse, or non-glossy. One example of a non-glossysurface is paper.
      * In general, you'll also want this to have a non-gray color value,
      * so this term would in general be a color defined as: [rd,gd,bd](n•L)
+     * </p>
      */
     private Color calcDiffusive(double kd, double nl, Color ip) {
         return ip.scale(Math.abs(nl) * kd);
@@ -266,6 +379,11 @@ public class Render {
         if (intersections == null) {
             return true;
         }
+        // Flat geometry cannot self intersect
+        if (geopoint.getGeometry() instanceof FlatGeometry) {
+            intersections.remove(geopoint);
+        }
+
         double lightDistance = light.getDistance(pointGeo);
         for (GeoPoint gp : intersections) {
             double temp = gp.getPoint().distance(pointGeo) - lightDistance;
@@ -275,8 +393,30 @@ public class Render {
         return true;
     }
 
+    private boolean occluded(LightSource light, Vector l, Vector n, GeoPoint geopoint) {
+        Point3D geometryPoint = geopoint.getPoint();
+        Vector lightDirection = light.getL(geometryPoint);
+        lightDirection.scale(-1);
+
+        Vector epsVector = geopoint.getGeometry().getNormal(geometryPoint);
+        epsVector.scale(epsVector.dotProduct(lightDirection) > 0 ? 2 : -2);
+        geometryPoint.add(epsVector);
+        Ray lightRay = new Ray(geometryPoint, lightDirection);
+        List<GeoPoint> intersections = _scene.getGeometries().findIntersections(lightRay);
+
+        // Flat geometry cannot self intersect
+        if (geopoint.getGeometry() instanceof FlatGeometry) {
+            intersections.remove(geopoint);
+        }
+
+        for (GeoPoint entry : intersections)
+            if (entry.getGeometry().getMaterial().getKt() == 0)
+                return true;
+        return false;
+    }
+
     private double transparency(LightSource light, Vector l, Vector n, GeoPoint geopoint) {
-        Vector lightDirection = l.scale(-1); // from point to light source
+        Vector lightDirection = l.scale(-1).normalize(); // from point to light source
         Ray lightRay = new Ray(geopoint.getPoint(), lightDirection, n);
         Point3D pointGeo = geopoint.getPoint();
 
@@ -315,4 +455,59 @@ public class Render {
         }
         return true;
     }
+    //this function improves ray tracing by making multiple rays through different parts of the pixel
+    private List<Ray> getRaysThroughPixel(int x, int y){
+
+        //the ratio of the screen dimensions to the number of pixels
+        double Rx = imageWriter.getWidth() /imageWriter.getNx();
+        double Ry = imageWriter.getHeight() / imageWriter.getNy();
+
+        //store the rays in a list
+        List<Ray> raysThroughPixel = new ArrayList<>();
+
+        //i will go from -1/2 * the max to 1/2 max
+        for (int i = (-1 * MAX_RAYS) / 2; i <= MAX_RAYS / 2; i++) {
+            for (int j = (-1 * MAX_RAYS) / 2; j <= MAX_RAYS / 2; j++) {
+
+                //calculating the coordinate of the offset rays
+                int iOffSet = (int) ((i * Rx) / MAX_RAYS);
+                int jOffSet = (int) ((j * Ry) / MAX_RAYS);
+                //making a ray to that position and placing it in the list
+                Ray ray = scene.getCamera().constructRayThroughPixel(imageWriter.getNx(), imageWriter.getNy(), x + iOffSet, y + jOffSet, scene.getDistance(), imageWriter.getWidth(), imageWriter.getHeight());
+                raysThroughPixel.add(ray);
+            }
+        }
+
+        return raysThroughPixel;
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    public ImageWriter getImageWriter() {
+        return imageWriter;
+    }
+
+    public static int getMaxCalcColorLevel() {
+        return MAX_CALC_COLOR_LEVEL;
+    }
+
+    public static double getMinCalcColorK() {
+        return MIN_CALC_COLOR_K;
+    }
+
+    public static int getMaxRays() {
+        return MAX_RAYS;
+    }
+
+    public ImageWriter get_imageWriter() {
+        return _imageWriter;
+    }
+
+    public Scene get_scene() {
+        return _scene;
+    }
+
+
 }

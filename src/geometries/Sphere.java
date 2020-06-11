@@ -9,18 +9,18 @@ import primitives.Vector;
 import java.util.List;
 
 import static primitives.Util.alignZero;
-public class Sphere extends RadialGeometry {
+
+public class  Sphere extends RadialGeometry {
     /**
      * The center of the sphere
      */
     private final Point3D _center;
 
-
-
-
     /**
      * constructor for a new sphere object.
- 
+     *
+     * @param radius the radius of the sphere
+     * @param center the center point of the sphere
      *
      * @throws Exception in case of negative or zero radius from RadialGeometry constructor
      */
@@ -45,6 +45,7 @@ public class Sphere extends RadialGeometry {
     }
 
     /**
+     * getter for the center property
      *
      * @return the center of the sphere
      */
@@ -54,8 +55,7 @@ public class Sphere extends RadialGeometry {
 
 
     /**
-     * get the normal to this sphere
-     * (in a given point)
+     * get the normal to this sphere in a given point
      */
     @Override
     public Vector getNormal(Point3D point) {
@@ -71,7 +71,7 @@ public class Sphere extends RadialGeometry {
         try {
             u = _center.subtract(p0);   // p0 == _center
         } catch (IllegalArgumentException e) {
-            return List.of(new GeoPoint(this, (ray.getTargetPoint(this._radius))));
+            return List.of(new GeoPoint(this, (ray.getPoint(this._radius))));
         }
         double tm = alignZero(v.dotProduct(u));
         double dSquared = (tm == 0) ? u.lengthSquared() : u.lengthSquared() - tm * tm;
@@ -95,21 +95,21 @@ public class Sphere extends RadialGeometry {
         if (t1 > 0 && t2 > 0) {
             if (t1dist > 0 && t2dist > 0) {
                 return List.of(
-                        new GeoPoint(this, (ray.getTargetPoint(t1))),
-                        new GeoPoint(this, (ray.getTargetPoint(t2)))); //P1 , P2
+                        new GeoPoint(this, (ray.getPoint(t1))),
+                        new GeoPoint(this, (ray.getPoint(t2)))); //P1 , P2
             } else if (t1dist > 0) {
                 return List.of(
-                        new GeoPoint(this, (ray.getTargetPoint(t1))));
+                        new GeoPoint(this, (ray.getPoint(t1))));
             } else if (t2dist > 0) {
                 return List.of(
-                        new GeoPoint(this, (ray.getTargetPoint(t2))));
+                        new GeoPoint(this, (ray.getPoint(t2))));
             }
         }
 
         if ((t1 > 0) && (t1dist > 0))
-            return List.of(new GeoPoint(this, (ray.getTargetPoint(t1))));
+            return List.of(new GeoPoint(this, (ray.getPoint(t1))));
         else if ((t2 > 0) && (t2dist > 0))
-            return List.of(new GeoPoint(this, (ray.getTargetPoint(t2))));
+            return List.of(new GeoPoint(this, (ray.getPoint(t2))));
         return null;
     }
 }

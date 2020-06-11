@@ -23,10 +23,12 @@ public class Point3D {
         this._z = _z;
     }
 
-    public Point3D(Point3D p) {
-        this._x = new Coordinate(p._x);
-        this._y = new Coordinate(p._y);
-        this._z = new Coordinate(p._z);
+    public Point3D(Point3D other)
+    {
+        Point3D p2=new Point3D(other._x,other._y,other._z);
+        this._x = p2._x;
+        this._y = p2._y;
+        this._z = p2._z;
     }
 
 
@@ -37,13 +39,21 @@ public class Point3D {
     public Coordinate getX() {
         return new Coordinate(_x);
     }
-
+    public void set_x(Coordinate _x) {
+        this._x = _x;
+    }
     public Coordinate getY() {
         return new Coordinate(_y);
+    }
+    public void set_y(Coordinate _y) {
+        this._y = _y;
     }
 
     public Coordinate getZ() {
         return new Coordinate(_z);
+    }
+    public void set_z(Coordinate _z) {
+        this._z = _z;
     }
 
     public double distanceSquared(Point3D other)
@@ -56,12 +66,16 @@ public class Point3D {
         return Math.sqrt(distanceSquared(other));
     }
 
-    public Point3D add(Vector v) {
-        return new Point3D(this._x._coord + v._head._x._coord,
-                this._y._coord + v._head._y._coord,
-                this._z._coord + v._head._z._coord);
+    public Point3D add(Vector vec) {
+
+        double dX = (this._x.get() + vec.get_head()._x.get());
+        double dY = (this._y.get() + vec.get_head()._y.get());
+        double dZ = (this._z.get() + vec.get_head()._z.get());
+
+        return new Point3D(new Coordinate(dX), new Coordinate(dY), new Coordinate(dZ));
     }
-    @Override
+
+        @Override
     public String toString() {
         return "(" +
                 _x +
@@ -70,9 +84,9 @@ public class Point3D {
                 ')';
     }
     public Point3D subtract(Vector v) {
-        return new Point3D(this._x._coord - v._head._x._coord,
-                this._y._coord - v._head._y._coord,
-                this._z._coord - v._head._z._coord);
+        return new Point3D(this._x._coord - v.get_head()._x._coord,
+                this._y._coord - v.get_head()._y._coord,
+                this._z._coord - v.get_head()._z._coord);
     }
 
     public Vector subtract(Point3D p) {
@@ -92,7 +106,7 @@ public class Point3D {
                 _z.equals(point3D._z);
     }
 
-   
+
 
 
 }

@@ -23,6 +23,10 @@ public class Polygon extends FlatGeometry {
      * List of polygon's vertices
      */
     protected List<Point3D> _vertices;
+    /**
+     * Associated plane in which the polygon lays
+     */
+    protected Plane _plane;
 
     /**
      * Polygon constructor based on vertices list. The list must be ordered by edge
@@ -58,7 +62,7 @@ public class Polygon extends FlatGeometry {
         _plane = new Plane(vertices[0], vertices[1], vertices[2]);
         if (vertices.length == 3) return; // no need for more tests for a Triangle
 
-        Vector n = _plane.getNormal(null);
+        Vector n = _plane.getNormal();
 
         // Subtracting any subsequent points will throw an IllegalArgumentException
         // because of Zero Vector if they are in the same point
@@ -98,8 +102,9 @@ public class Polygon extends FlatGeometry {
 
     @Override
     public Vector getNormal(Point3D point) {
-        return _plane.getNormal(null);
+        return _plane.getNormal();
     }
+
 
     @Override
     public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
@@ -132,10 +137,5 @@ public class Polygon extends FlatGeometry {
             result.add(new GeoPoint(this, geo.getPoint()));
         }
         return result;
-    }
-
-    @Override
-    public long getNormal() {
-        return 0;
     }
 }

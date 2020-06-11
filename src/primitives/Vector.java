@@ -4,38 +4,68 @@ package primitives;
 *Class Vector
  */
 public class Vector {
-    Point3D _head;
+    private  Point3D _head;
 
-    /**
-     * @param p
+    public  final static Vector ZERO = new Vector(new Point3D(new Coordinate(0.0),new Coordinate(0.0),new Coordinate(0.0)));
+
+    /*
+     * Constractor
+     * • Builders receiving:
+     * a) three coordinates,
+     * b) three double-digit numbers,
+     * c) a point,
+     * d) a vector
+     * @param _head
      */
-    public Vector(Point3D p) {
-        if (p.equals(Point3D.ZERO)) {
-            throw new IllegalArgumentException("Point3D(0.0,0.0,0.0) not valid for vector head");
-        }
-        this._head = new Point3D(p._x._coord, p._y._coord, p._z._coord);
+    public Vector(Point3D _head) {
+        Point3D Zero=new Point3D(new Coordinate(0.0),new Coordinate(0.0),new Coordinate(0.0));
+
+        if (_head != Zero)
+            this._head = _head;
+
+        else throw new IllegalArgumentException (  "head cannot be the zero vector");
+
+
+    }
+    public Point3D get_head() {
+        return _head;
     }
 
-    /**
-     * @param v
+    /*
+     * set Fun set Point to _head
+     * @param _head
      */
-    public Vector(Vector v) {
-        this(v._head);
+    public void set_head(Point3D _head) {
+        this._head = _head;
+    }
+    public Vector(){}
+    public  Vector(Point3D p1,Point3D p2){
+        this._head=p1.subtract(p2)._head;
+    }
+    public Vector (Coordinate _x,Coordinate _y,Coordinate _z){
+        Point3D _head =new Point3D(new Coordinate(_x),new Coordinate(_y),new Coordinate(_z));
+        //  Point3D Zero=new Point3D(new Coordinate(0.0),new Coordinate(0.0),new Coordinate(0.0));
+
+        if (_head.getX().get() == 0.0 &&_head.getY().get() == 0.0 &&_head.getX().get() == 0.0)
+            throw new IllegalArgumentException (  "head cannot be the zero vector");
+
+        else
+            this._head = _head;
+
     }
 
-    public Vector(Point3D p1, Point3D p2) {
-        this(p1.subtract(p2));
-    }
+    public Vector(double _x,double _y,double _z){
 
-    public Vector(double x,double y, double z) {
-        this(new Point3D(x,y,z));
-    }
+        if (_x == 0.0 &&_y == 0.0 &&_z == 0.0)
+            throw new IllegalArgumentException (  "head cannot be the zero vector");
+        this._head=new Point3D(_x,_y,_z);
+//    else throw new IllegalArgumentException (  "head cannot be the zero vector");
 
-    /**
-     * @return the point that the ray is start from.
-     */
-    public Point3D getHead() {
-        return new Point3D(_head._x._coord, _head._y._coord, _head._z._coord);
+    }
+    public Vector(Vector _head)
+    {
+        Vector v2=new Vector(_head.get_head().getX().get(),_head.get_head().getY().get(),_head.get_head().getZ().get());
+        this._head=v2._head;
     }
 //פעולות חשבון על וקטורים
     /**

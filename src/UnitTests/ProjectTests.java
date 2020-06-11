@@ -152,6 +152,7 @@ public void Soft_Shadows3spheres() {
     scene.setBackground(Color.BLACK);
     scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
 
+
     scene.addGeometries( //
             new Triangle(Color.BLACK, new Material(0.5, 0.5, 60), //
                     new Point3D(-150, 150, 115), new Point3D(150, 150, 135), new Point3D(75, -75, 150)), //
@@ -175,4 +176,50 @@ public void Soft_Shadows3spheres() {
     render.renderImage();
     render.writeToImage();
 }
+///////
+
+    @Test
+    public void Softshadow8OBJECT3LIGHTS() {
+        Scene scene = new Scene("Test scene");
+        scene.setCamera(new Camera(new Point3D(0, 0, -1000), new Vector(0, 0, 1), new Vector(0, -1, 0)));
+        scene.setDistance(1000);
+        scene.setBackground(Color.BLACK);
+        scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+
+
+        scene.addGeometries( //
+                new Triangle(Color.BLACK, new Material(0.5, 0.5, 60), //
+                        new Point3D(-150, 150, 115), new Point3D(150, 150, 135), new Point3D(75, -75, 150)), //
+                new Triangle(Color.BLACK, new Material(0.5, 0.5, 60), //
+                        new Point3D(-150, 150, 115), new Point3D(-70, -70, 140), new Point3D(75, -75, 150)), //
+                new Sphere(new Color(java.awt.Color.RED), new Material(0.2, 0.2, 30, 0.6, 0), // )
+                        30, new Point3D(60, -50, 50)),
+                new Sphere(new Color(java.awt.Color.GREEN), new Material(0.2, 0.2, 30, 0.6, 0), // )
+                        40, new Point3D(100, -5, 100)),
+                new Sphere(new Color(java.awt.Color.BLUE), new Material(0.2, 0.2, 30, 0.6, 0), // )
+                        10, new Point3D(20, -20, 80)),
+                new Sphere(new Color(java.awt.Color.YELLOW), new Material(0.2, 0.2, 30, 0.6, 0), // )
+                        10, new Point3D(10, -10, 100)),
+                new Sphere(new Color(java.awt.Color.GRAY), new Material(0.2, 0.2, 30, 0.6, 0), // )
+                        90, new Point3D(100, 0, 120)),
+                new Sphere(new Color(java.awt.Color.PINK), new Material(0.2, 0.2, 30, 0.6, 0), // )
+                        20, new Point3D(34, -20, 70)));
+
+//radius!!!!
+        //כדי לראות מה קורה ללא הרדיוס נוריד אותו ונראה איך הצל משתנה!! וכשנחזיר את הרדיוס יתקבל הנופך הרך של הצל!
+        scene.addLights(new PointLight(new Color(700, 400, 400), //
+                new Point3D(90, -80, 50 ), 1, 4E-5, 2E-7,4));
+        scene.addLights(new DirectionalLight(new Color(500, 300, 0), new Vector(1, -1, 1)));
+        scene.addLights(new PointLight(new Color(500, 300, 0), new Point3D(-50, 50, -50), 1, 0.00001, 0.000001,2));
+        scene.addLights(new SpotLight(new Color(1020, 400, 400),  new Point3D(-750, 750, 150),
+                new Vector(-1, 1, 4), 1, 0.00001, 0.000005));
+
+
+        ImageWriter imageWriter = new ImageWriter("soft shadows8.3", 200, 200, 600, 600);
+        Render render = new Render(imageWriter, scene);
+
+        render.renderImage();
+        render.writeToImage();
+    }
+
 }

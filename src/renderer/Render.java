@@ -18,9 +18,7 @@ import static geometries.Intersectable.GeoPoint;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
-/**
- *
- */
+
 public class Render {
     private Scene scene;
     private ImageWriter imageWriter;
@@ -279,7 +277,7 @@ public class Render {
 
         //    Box box=new Box(_scene.getGeometries());//make new box from geometry
         //  if (box.contains(ray)) {//check the box
-        List<GeoPoint> intersections = _scene.getGeometries().getFindIntersections(ray);
+        List<GeoPoint> intersections = _scene.getGeometries().treeGeometries(ray,Double.POSITIVE_INFINITY);
         if (intersections == null)
             return null;
 

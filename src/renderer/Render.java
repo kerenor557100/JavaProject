@@ -18,7 +18,9 @@ import static geometries.Intersectable.GeoPoint;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
-
+/**
+ *
+ */
 public class Render {
     private Scene scene;
     private ImageWriter imageWriter;
@@ -40,7 +42,14 @@ public class Render {
     private final int SPARE_THREADS = 2;
     private boolean _print = false;
 
-
+    /**
+     * Pixel is an internal helper class whose objects are associated with a Render object that
+     * they are generated in scope of. It is used for multithreading in the Renderer and for follow up
+     * its progress.<br/>
+     * There is a main follow up object and several secondary objects - one in each thread.
+     * @author Dan
+     *
+     */
     private class Pixel {
         private long _maxRows = 0;
         private long _maxCols = 0;
@@ -68,6 +77,7 @@ public class Render {
          *  Default constructor for secondary Pixel objects
          */
         public Pixel() {}
+
         /**
          * Internal function for thread-safe manipulating of main follow up Pixel object - this function is
          * critical section for all the threads, and main Pixel object data is the shared data of this critical
@@ -119,10 +129,14 @@ public class Render {
             return false;
         }
     }
+
+
+
+
+
     /**
      * This function renders image's pixel color map from the scene included with
      * the Renderer object
-     * thread
      */
     public void renderImage() {
         final int nX = _imageWriter.getNx();
@@ -142,17 +156,17 @@ public class Render {
                 while (thePixel.nextPixel(pixel)) {
 
                     Ray rays = camera.constructRayThroughPixel(nX, nY, pixel.col, pixel.row, dist, width, height);
+
                     GeoPoint closestPoint = findClosestIntersection(rays);
-                    if (closestPoint == null)
-                    {
+                    if (closestPoint == null) {
                         _imageWriter.writePixel(pixel.col, pixel.row, background);
-                    }
-                    else
-                    {
-                        _imageWriter.writePixel(pixel.col, pixel.row, calcColor(closestPoint,rays).getColor());
+                    } else {
+                        _imageWriter.writePixel(pixel.col, pixel.row, calcColor(closestPoint, rays).getColor());
                     }
                 }
+
             }
+
             );
         }
 
@@ -187,6 +201,7 @@ public class Render {
         }
         return this;
     }
+
     /**
      * Set debug printing on
      *
@@ -224,6 +239,8 @@ public class Render {
 
         if (intersectionPoints == null) {
             return null;
+
+
         }
 
         GeoPoint result = null;
@@ -260,7 +277,9 @@ public class Render {
         double closestDistance = Double.MAX_VALUE;
         Point3D ray_p0 = ray.getPoint();
 
-        List<GeoPoint> intersections = _scene.getGeometries().findIntersections(ray);
+        //    Box box=new Box(_scene.getGeometries());//make new box from geometry
+        //  if (box.contains(ray)) {//check the box
+        List<GeoPoint> intersections = _scene.getGeometries().getFindIntersections(ray);
         if (intersections == null)
             return null;
 
@@ -273,9 +292,11 @@ public class Render {
         }
         return closestPoint;
     }
+    //   return null;
+    // }
 
     private Color calcColor(GeoPoint geoPoint, Ray inRay) {
-        Color color = calcColor(geoPoint, inRay, MAX_CALC_COLOR_LEVEL, 1.0);
+        Color color = calcColor(geoPoint, inRay, MAX_CALC_COLOR_LEVEL,  1.0);
         // color = color.add(_scene.getAmbientLight().getIntensity());
         return color;
     }
@@ -308,6 +329,7 @@ public class Render {
 
         double kr = geometryGeo.getMaterial().getKr();
         double kkr = k * kr;
+
         if (kkr > MIN_CALC_COLOR_K) {
             Ray reflectedRay = constructReflectedRay(pointGeo, inRay, n);
             GeoPoint reflectedPoint = findClosestIntersection(reflectedRay);
@@ -403,6 +425,7 @@ public class Render {
         }
         return Color.BLACK;
     }
+
     private Ray constructRefractedRay(Point3D pointGeo, Ray inRay, Vector n) {
         return new Ray(pointGeo, inRay.getDirection(), n);
     }
@@ -481,7 +504,7 @@ public class Render {
         Ray lightRay = new Ray(geopoint.getPoint(), lightDirection, n);
         Point3D pointGeo = geopoint.getPoint();
 
-        List<GeoPoint> intersections = _scene.getGeometries().findIntersections(lightRay);
+        List<GeoPoint> intersections = _scene.getGeometries().getFindIntersections(lightRay);
         if (intersections == null) {
             return true;
         }
@@ -503,11 +526,12 @@ public class Render {
         Point3D geometryPoint = geopoint.getPoint();
         Vector lightDirection = light.getL(geometryPoint);
         lightDirection.scale(-1);
+
         Vector epsVector = geopoint.getGeometry().getNormal(geometryPoint);
         epsVector.scale(epsVector.dotProduct(lightDirection) > 0 ? 2 : -2);
         geometryPoint.add(epsVector);
         Ray lightRay = new Ray(geometryPoint, lightDirection);
-        List<GeoPoint> intersections = _scene.getGeometries().findIntersections(lightRay);
+        List<GeoPoint> intersections = _scene.getGeometries().getFindIntersections(lightRay);
 
         // Flat geometry cannot self intersect
         if (geopoint.getGeometry() instanceof FlatGeometry) {
@@ -525,7 +549,7 @@ public class Render {
         Ray lightRay = new Ray(geopoint.getPoint(), lightDirection, n);
         Point3D pointGeo = geopoint.getPoint();
 
-        List<GeoPoint> intersections = _scene.getGeometries().findIntersections(lightRay);
+        List<GeoPoint> intersections = _scene.getGeometries().getFindIntersections(lightRay);
         if (intersections == null) {
             return 1d;
         }
@@ -547,7 +571,7 @@ public class Render {
         Ray lightRay = new Ray(geopoint.getPoint(), lightDirection, n);
         Point3D pointGeo = geopoint.getPoint();
 
-        List<GeoPoint> intersections = _scene.getGeometries().findIntersections(lightRay);
+        List<GeoPoint> intersections = _scene.getGeometries().getFindIntersections(lightRay);
         if (intersections == null) {
             return true;
         }
@@ -586,7 +610,6 @@ public class Render {
         return raysThroughPixel;
     }
 
-
     public Scene getScene() {
         return scene;
     }
@@ -614,7 +637,8 @@ public class Render {
     public Scene get_scene() {
         return _scene;
     }
-//  public double get_supersamplingRate() {
+
+    //  public double get_supersamplingRate() {
     //    return _supersamplingRate;
     // }
 }

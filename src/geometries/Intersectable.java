@@ -1,7 +1,7 @@
 package geometries;
 
-import primitives.*;
-
+import primitives.Point3D;
+import primitives.Ray;
 
 import java.util.List;
 
@@ -10,14 +10,9 @@ import java.util.List;
  * to intersect from a ray to their entity (Shape)
  */
 
-/**
- * Interface for Composite Design Pattern the Composite Class - Geometries the
- * basic Classes - all the specific geometries
 
- */
 public abstract class Intersectable {
     private static boolean _actBoundingBox = false;
-
     public static void set_actBoundingBox(boolean _actBoundingBox) {
         Intersectable._actBoundingBox = _actBoundingBox;
     }
@@ -225,4 +220,5 @@ public abstract class Intersectable {
 
         return true;
     }
+
 }

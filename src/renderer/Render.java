@@ -172,6 +172,11 @@ public class Render {
         return closestPoint;
     }
 
+    
+     /**
+     * Color functions
+     */
+    
     private Color calcColor(GeoPoint geoPoint, Ray inRay) {
         Color color = calcColor(geoPoint, inRay, MAX_CALC_COLOR_LEVEL, 1.0);
         color = color.add(_scene.getAmbientLight().getIntensity());

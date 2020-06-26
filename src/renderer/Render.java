@@ -125,6 +125,12 @@ public class Render {
         }
     }
 
+    
+    /**
+    * getClosestPoint fonction
+    */
+    
+    
     private GeoPoint getClosestPoint(List<GeoPoint> intersectionPoints) {
 
         if (intersectionPoints == null) {
@@ -147,6 +153,9 @@ public class Render {
         return result;
     }
 
+    /**
+    * findClosestIntersection fonction
+    */
     
     private GeoPoint findClosestIntersection(Ray ray) {
 
@@ -363,6 +372,11 @@ public class Render {
         return false;
     }
 
+    /**
+     * transparency functions
+     */
+    
+    
     private double transparency(LightSource light, Vector l, Vector n, GeoPoint geopoint) {
         Vector lightDirection = l.scale(-1); // from point to light source
         Ray lightRay = new Ray(geopoint.getPoint(), lightDirection, n);

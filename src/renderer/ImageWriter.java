@@ -18,6 +18,11 @@ import java.io.IOException;
  * קיבלנו את זה מוכן בשלב 5
  */
 //מחלקה המקבלת סצנה ומעבירה אותה למסך
+
+/**
+* ImageWriter class
+*/
+    
 public class ImageWriter {
     private double _imageWidth, _imageHeight;
     private int _nX, _nY;

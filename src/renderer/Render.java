@@ -28,7 +28,6 @@ public class Render {
     private final ImageWriter _imageWriter;
     private final Scene _scene;
 
-    //   private double _supersamplingRate;
 
     public Render(ImageWriter imageWriter, Scene scene) {
         this._imageWriter = imageWriter;
@@ -36,7 +35,7 @@ public class Render {
         //     this._supersamplingRate = 0d;
     }
     // ...........
-    private int _threads = 1;
+    private int _threads = 3;
     private final int SPARE_THREADS = 2;
     private boolean _print = false;
 
@@ -45,7 +44,7 @@ public class Render {
      * they are generated in scope of. It is used for multithreading in the Renderer and for follow up
      * its progress.<br/>
      * There is a main follow up object and several secondary objects - one in each thread.
-     * @author Dan
+     * @author Dan , Keren Or and Avital.
      *
      */
     private class Pixel {
@@ -209,12 +208,7 @@ public class Render {
         _print = true;
         return this;
     }
-    //public double getSupersamplingRate() {return _supersamplingRate; }
-
-    // public void setSupersamplingRate(double supersamplingRate) {
-    //   _supersamplingRate = supersamplingRate;
-//    }
-
+    
     public void printGrid(int interval, java.awt.Color color) {
         int Nx = _imageWriter.getNx();
         int Ny = _imageWriter.getNy();
@@ -460,6 +454,11 @@ public class Render {
      * the surface.
      * </p>
      */
+    
+    
+    /**
+    *ספקולר-האור שמחזיר האובייקט תלוי בחומר ממנו עשוי האובייקט
+    */
     private Color calcSpecular(double ks, Vector l, Vector n, double nl, Vector V, int nShininess, Color ip) {
         double p = nShininess;
         if (isZero(nl)) {
@@ -489,6 +488,11 @@ public class Render {
      * so this term would in general be a color defined as: [rd,gd,bd](n•L)
      * </p>
      */
+    
+    /**
+    *דיפוזיה-התפשטות האור על האובייקט
+    */
+    
     private Color calcDiffusive(double kd, double nl, Color ip) {
         return ip.scale(Math.abs(nl) * kd);
     }
@@ -497,6 +501,7 @@ public class Render {
         return (val > 0d);
     }
 
+    //יש עליו צל או לא
     private boolean unshaded_0(LightSource light, Vector l, Vector n, GeoPoint geopoint) {
         Vector lightDirection = l.scale(-1); // from point to light source
         Ray lightRay = new Ray(geopoint.getPoint(), lightDirection, n);
@@ -520,6 +525,7 @@ public class Render {
         return true;
     }
 
+    //מכוסה או לא
     private boolean occluded(LightSource light, Vector l, Vector n, GeoPoint geopoint) {
         Point3D geometryPoint = geopoint.getPoint();
         Vector lightDirection = light.getL(geometryPoint);
@@ -542,6 +548,7 @@ public class Render {
         return false;
     }
 
+    //שקיפות
     private double transparency(LightSource light, Vector l, Vector n, GeoPoint geopoint) {
         Vector lightDirection = l.scale(-1).normalize(); // from point to light source
         Ray lightRay = new Ray(geopoint.getPoint(), lightDirection, n);

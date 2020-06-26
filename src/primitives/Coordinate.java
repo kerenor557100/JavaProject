@@ -8,6 +8,10 @@ import static primitives.Util.*;
  *
  * @author keren or and avital
  */
+
+/**
+* Coordinate class
+*/
 public final class Coordinate {
     /**
      * Coordinate value, intentionally "package-friendly" due to performance

@@ -8,7 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.isZero;
+
 //המצלמה!! מרכז המצלמה המשקיף על המודל הוא ראשית הצירים ממנו יוצאים שלושה וקטורים שהם הצירים של המערכת.תפקידה חשוב מאוד במערכת.
+//Avital and Keren Or
+
+
 public class Camera {
     Point3D _p0;
     Vector _vTo;
@@ -46,6 +50,10 @@ public class Camera {
         return new Vector(_vRight);
     }
 
+    /**
+    *constructRay function - מעביר קרניים דרך פיקסלים
+    */
+        
     public Ray constructRayThroughPixel(int nX, int nY,
                                         int j, int i, double screenDistance,
                                         double screenWidth, double screenHeight) {
@@ -92,6 +100,9 @@ public class Camera {
 
         //finding the intersection point with the view plane according the formula in the moodle
 
+        
+   
+        
         //-----SuperSampling-----
         List<Ray> rays = new LinkedList<>();//the return list, construct Rays Through Pixels
 

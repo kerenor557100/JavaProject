@@ -8,6 +8,12 @@ package primitives;
  *
  * @author Dan Zilberstein
  */
+
+
+/**
+* Color class
+*/
+
 public class Color {
     public static final Color WHITE =new Color() ;
     /**

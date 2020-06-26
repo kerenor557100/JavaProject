@@ -11,8 +11,10 @@ import java.util.stream.Collectors;
 
 
 /**
- *מקור אור נקודתי: מקור אור שאינו כיווני בעל עוצמה.יש מיקום אך לא כיוון.
+ * מקור אור נקודתי: מקור אור שאינו כיווני בעל עוצמה.יש מיקום אך לא כיוון.
+ *כמו מנורה בחדר.
  */
+
 public class PointLight extends Light implements LightSource {
     Point3D _position;
     double _kC; // Constant attenuation

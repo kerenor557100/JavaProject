@@ -150,6 +150,11 @@ public class Color {
      * @param k scale factor
      * @return new Color object which is the result of the operation
      */
+    
+     /**
+     *scale is a function that receives a parameter k - intensity and multiplies it by the three parameters that create color.
+     */
+    
     public Color scale(double k) {
         if (k < 0)
             throw new IllegalArgumentException("Can't scale a color by a negative number");

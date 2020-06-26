@@ -5,7 +5,10 @@ import primitives.Color;
 import primitives.Point3D;
 import primitives.Util;
 import primitives.Vector;
+
 //מקור אור זרקור: מקור אור נקודתי עם כיוון ועם מיקום.
+//כמו פנס
+
 public class SpotLight extends PointLight {
     Vector _direction;
     double _concentration;

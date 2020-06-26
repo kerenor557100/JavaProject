@@ -21,6 +21,11 @@ import static primitives.Util.isZero;
 /**
  * Keren Or and Avital
  */
+
+
+/**
+ * Render class
+ */
 public class Render {
     private static final int MAX_CALC_COLOR_LEVEL = 10;
     private static final double MIN_CALC_COLOR_K = 0.001;
@@ -36,6 +41,15 @@ public class Render {
         this._supersamplingDensity = 0d;
     }
 
+    
+ /**
+ * Render fonctions
+ */
+    
+    
+    /**
+     * Density functions
+    */
     public double getSupersamplingDensity() {
         return _supersamplingDensity;
     }
@@ -44,7 +58,10 @@ public class Render {
         _supersamplingDensity = supersamplingDensity;
     }
 
-
+    
+    /**
+     * printGrid function
+    */
     public void printGrid(int interval, java.awt.Color color) {
         int Nx = _imageWriter.getNx();
         int Ny = _imageWriter.getNy();

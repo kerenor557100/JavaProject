@@ -13,6 +13,11 @@ import static primitives.Util.isZero;
 /**
  * A Tube with a certain _height
  */
+
+/**
+* Cylinder class
+*/
+
 public class Cylinder extends Tube {
 
     private double _height;

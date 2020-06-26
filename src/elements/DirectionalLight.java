@@ -3,6 +3,16 @@ package elements;
 import primitives.Color;
 import primitives.Point3D;
 import primitives.Vector;
+
+/**
+* Keren Or and Avital
+*/
+
+/**
+* DirectionalLight class
+*/
+
+
 // מקור אור כיווני: (כגון השמש) זהו מקור אור הנמצא באינסוף או במיקום רחוק מאוד, בעל כיוון ואין הנחתה בעקבות המרחק.
 public class DirectionalLight extends Light implements LightSource {
     private final Vector _direction;

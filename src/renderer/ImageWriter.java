@@ -26,7 +26,7 @@ public class ImageWriter {
 
     private BufferedImage _image;
 
-    private String _imageName;
+    private String _imageName;1ר
 
     // ***************** Constructors ********************** //
     /**

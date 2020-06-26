@@ -12,6 +12,15 @@ import primitives.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+* Keren Or and Avital project
+*/
+
+
+/**
+* Scene class
+*/
+
 public class Scene {
     private final String _name;
     private final Geometries _geometries = new Geometries();

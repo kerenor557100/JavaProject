@@ -2,6 +2,11 @@ package primitives;
 
 import static primitives.Util.isZero;
 
+/**
+*Ray class
+*Keren Or and Avital
+*/
+
 public class Ray {
 
     private static final double DELTA = 0.1;

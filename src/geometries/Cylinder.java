@@ -28,7 +28,7 @@ public class Cylinder extends Tube {
     public Cylinder(double _radius, Ray _ray, double _height) {
         super(_radius, _ray);
         this._height = _height;
-        buildBoundingBox();
+        buildBoundingBox(); //בונה בוקס
     }
 
     /**
@@ -70,6 +70,8 @@ public class Cylinder extends Tube {
 
     private void buildBoundingBox(){
 
+        //cylinder's direction 
+        //X ושל Z שויים ל0 אז נבדוק לגבי הערך של Y ואם הY חיובי אז זה מינימום בודקים את נקודת ההתחלה של הקרן . אם הערך של 
         if (this._ray.getDirection().get_head().getX().get() == 0 &&
                 this._ray.getDirection().get_head().getZ().get() ==0){
             if (this._ray.getDirection().get_head().getY().get() > 0){
@@ -89,19 +91,20 @@ public class Cylinder extends Tube {
         else {
             double xCenterBottom, xCenterTop;
 
-            xCenterBottom = _ray.getStartPoint().getX().get();
+            xCenterBottom = _ray.getStartPoint().getX().get();     //נקודת התחלה של הקרן
             xCenterTop = _ray.getPoint(_height).getX().get();
-            Point3D normal = _ray.getDirection().get_head();
-            double sqrX = _radius*Math.sqrt(1 - normal.getX().get()*normal.getX().get());
+            Point3D normal = _ray.getDirection().get_head();   //נקודה של הכיוון
+            double sqrX = _radius*Math.sqrt(1 - normal.getX().get()*normal.getX().get()); 
 
             double max_x_bottom = xCenterBottom + sqrX;
             double min_x_bottom = xCenterBottom -sqrX;
             double max_x_top = xCenterTop + sqrX;
             double min_x_top = xCenterTop - sqrX;
 
-            this.box._max_X = max_x_bottom > max_x_top? max_x_bottom: max_x_top;
+            this.box._max_X = max_x_bottom > max_x_top? max_x_bottom: max_x_top; //בודק מי צריך להיות המקסימום
             this.box._min_X = min_x_bottom < min_x_top? min_x_bottom: min_x_top;
 
+            //נקודת Y
             double yCenterBottom, yCenterTop;
             yCenterBottom = _ray.getStartPoint().getY().get();
             yCenterTop = _ray.getPoint(_height).getY().get();
@@ -115,6 +118,7 @@ public class Cylinder extends Tube {
             this.box._max_Y = max_y_bottom > max_y_top? max_y_bottom: max_y_top;
             this.box._min_Y = min_y_bottom < min_y_top? min_y_bottom: min_y_top;
 
+            //נקודת Z
             double zCenterBottom, zCenterTop;
             zCenterBottom = _ray.getStartPoint().getZ().get();
             zCenterTop = _ray.getPoint(_height).getZ().get();

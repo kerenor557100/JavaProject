@@ -17,6 +17,7 @@ public abstract class Intersectable {
         Intersectable._actBoundingBox = _actBoundingBox;
     }
 
+    //ברירת מחדל בשביל צורה אינסופית , אין באמת קופסה לכן זה אינסף
     public class Box{
         public double _max_X = Double.POSITIVE_INFINITY;
         public double _min_X = Double.NEGATIVE_INFINITY;
@@ -26,7 +27,9 @@ public abstract class Intersectable {
         public double _min_Z = Double.NEGATIVE_INFINITY;
     }
 
+    //יוצר בוקס חדש
     protected Box box = new Box();
+
 
     public Box getBox() {
         return box;
@@ -124,14 +127,18 @@ public abstract class Intersectable {
      * @param ray a ray in the scene that intersect the Intersectable
      * @return boolean value if their is intersection with the box.
      */
+    
+    //אם יש קרן שחותכת בקופסא הרבה יותר קל לבדוק את נקודות החיתוך
     public boolean isIntersectionWithBox(Ray ray){
 
+        //נקודות התחלה של הקרן
         Point3D start = ray.getStartPoint();
 
         double start_X = start.getX().get();
         double start_Y = start.getY().get();
         double start_Z = start.getZ().get();
 
+        //כיוון הקרן
         Point3D direction = ray.getDirection().get_head();
 
         double direction_X = direction.getX().get();
@@ -140,8 +147,10 @@ public abstract class Intersectable {
 
         double max_t_for_X;
         double min_t_for_X;
-
+        
+        //נקודת X
         //If the direction_X is negative then the _min_X give the maximal value
+        //אם הכיוון שלילי  המינימום ייתן את הערך היותר גדול
         if (direction_X < 0) {
             max_t_for_X = (box._min_X - start_X) / direction_X;
             // Check if the Intersectble is behind the camera
@@ -162,6 +171,7 @@ public abstract class Intersectable {
             }
         }
 
+        //נקודת Y
         double max_t_for_Y;
         double min_t_for_Y;
 
@@ -191,6 +201,7 @@ public abstract class Intersectable {
 
         if (temp_max < temp_min) return false;
 
+        //נקודת Z
         double max_t_for_Z;
         double min_t_for_Z;
 

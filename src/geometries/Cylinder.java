@@ -71,7 +71,6 @@ public class Cylinder extends Tube {
     private void buildBoundingBox(){
 
         //cylinder's direction 
-        //X ושל Z שויים ל0 אז נבדוק לגבי הערך של Y ואם הY חיובי אז זה מינימום בודקים את נקודת ההתחלה של הקרן . אם הערך של 
         if (this._ray.getDirection().get_head().getX().get() == 0 &&
                 this._ray.getDirection().get_head().getZ().get() ==0){
             if (this._ray.getDirection().get_head().getY().get() > 0){
